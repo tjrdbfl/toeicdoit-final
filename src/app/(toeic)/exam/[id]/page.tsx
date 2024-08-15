@@ -19,24 +19,24 @@ export default async function ExamIdPage({ params }: { params: { id: number } })
         testType: ""
     }];
 
+    const name=cookies().get('name')?.value;
     try {
         const accessToken=cookies().get('accessToken')?.value;
-        const response = await fetch(`${process.env.NEXT_PUBLIC_TOEIC_API_URL}/api/${SERVER_API.TOEIC}/exam?id=${1}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_TOEIC_API_URL}/api/toeic/exam`, {
             method: 'GET',
             headers: AuthorizeHeader(accessToken),
             cache: 'no-store'
         })
 
-        console.log(response.status);
         if (response.status === 200) {
             const data = await response.json() as ToeicProblemData;
             toeic = data;
         }
         else {
-            throw new Error(ERROR.SERVER_ERROR);
+            //throw new Error(ERROR.SERVER_ERROR);
         }
     } catch (err) {
-        throw new Error(ERROR.SERVER_ERROR);
+        //throw new Error(ERROR.SERVER_ERROR);
     }
 
 
@@ -46,17 +46,17 @@ export default async function ExamIdPage({ params }: { params: { id: number } })
                 <ToeicHeader label={`토익두잇 실전 모의고사`} />
             </div>
             <div className="fixed top-10 w-full">
-                <ToeicControl sound={toeic[0].sound} numberOfQuestions={200} type={"exam"} />
+                <ToeicControl sound={toeic[0].sound} numberOfQuestions={200} type={"exam"} toeicId={params.id}/>
             </div>
 
             <div className="flex items-start mt-24 px-5 xl:px-10 2xl:px-[25%] bg-zinc-100">
                 <div className="flex flex-col w-[650px] ">
-                    <ExamContainer toeicIds={toeic[0].toeicIds} />
+                    <ExamContainer toeicIds={toeic[0].toeicIds} toeicId={params.id} />
                 </div>
 
             </div>
             <div className="mt-20" />
-            <ExamAnswer toeicId={Number(params.id)}/>
+            <ExamAnswer toeicId={Number(params.id)} name={name===undefined?'':name}/>
         </>
     );
 }

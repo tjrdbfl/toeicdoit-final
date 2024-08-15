@@ -8,13 +8,10 @@ const DoughnutContainer = ({
     score:number;
     DoughnutUserData: number[];
     DoughnutOtherData: number[];
-    DoughnutUserTime: {
-        hour: number;
-        minute: number;
-    };
+    DoughnutUserTime: string;
     DoughnutOtherTime: {
-        hour: number;
         minute: number;
+        seconds: number;
     }
 }) => {
     return (
@@ -25,7 +22,7 @@ const DoughnutContainer = ({
                   </div>
                   <div className="mt-2" />
                   <div className="text-slate-500 text-[14px] mb-3">
-                    회원님과 {score}점 사용자 풀이 시간 차이입니다. 이
+                    회원님과 {(Math.floor(score/100)+1)*100}점대 사용자 풀이 시간 차이입니다. 이
                     그래프는 회원님과 비슷한 점수대 사용자 간의 문제당 평균 풀이
                     시간 차이를 보여줍니다. 이를 통해 자신의 약점을 보완해보세요.
                   </div>
@@ -35,11 +32,7 @@ const DoughnutContainer = ({
                         <div className="w-[120px] flex flex-col gap-x-2">
                           <DoughnutChart
                             data={DoughnutUserData}
-                            text={`${
-                              Math.floor(DoughnutUserTime.hour / 10) === 0
-                                ? `0${DoughnutUserTime.hour}`
-                                : DoughnutUserTime.hour
-                            } : ${DoughnutUserTime.minute}`}
+                            text={DoughnutUserTime}
                           />
                           <p className="text-black text-[12px] font-medium text-center text-pretty mt-3">
                             회원님의 풀이 시간입니다.
@@ -49,10 +42,10 @@ const DoughnutContainer = ({
                           <DoughnutChart
                             data={DoughnutOtherData}
                             text={`${
-                              Math.floor(DoughnutOtherTime.hour / 10) === 0
-                                ? `0${DoughnutOtherTime.hour}`
-                                : DoughnutOtherTime.hour
-                            } : ${DoughnutOtherTime.minute}`}
+                              Math.floor(DoughnutOtherTime.minute / 10) === 0
+                                ? `0${DoughnutOtherTime.minute}`
+                                : DoughnutOtherTime.minute
+                            } : ${DoughnutOtherTime.seconds}`}
                           />
                           <p className="text-black text-[12px] font-medium text-center text-pretty mt-3">
                             회원님과 비슷한 점수를 가진 회원들의 풀이

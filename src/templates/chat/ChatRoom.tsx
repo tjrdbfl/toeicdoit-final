@@ -118,7 +118,8 @@ const ChatRoom = ({
             try {
                 const newMessage: ChatData = JSON.parse(event.data);
                 if(newMessage.id === "0") {
-                    //newMessage.message
+                    console.log('인원 수: ',newMessage.message);
+                    return;
                 };
 
                 setNewMsg(newMessage.message);

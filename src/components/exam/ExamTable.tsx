@@ -1,3 +1,4 @@
+'use client';
 import { RealTestContent } from "@/constants/my-page/datagrid";
 import { ITEMS_PER_PAGE, ToeicData } from "@/types/ToeicData";
 import TakeBtn from "../button/TakeBtn";
@@ -5,6 +6,7 @@ import CompleteBtn from "../button/CompleteBtn";
 import ExamBody from "./ExamBody";
 import { CommonHeader } from "@/config/headers";
 import { getExamTitleId, getExamTitleYear, getTakeById } from "@/service/utils/utils";
+import { useTakeStore } from "@/store/toeic/store";
 
 export default async function ExamTable({ query, currentPage }: {
     query: string,
@@ -13,6 +15,7 @@ export default async function ExamTable({ query, currentPage }: {
 
     const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
+    const {takes}=useTakeStore();
     let tests: { id: number, title: string, take: boolean |undefined }[] = [
         {
             id: 10*(currentPage-1)+1,
@@ -99,10 +102,10 @@ export default async function ExamTable({ query, currentPage }: {
                                         {content.title}
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-1.5 text-[14px]">
-                                        {content.take ?
-                                            <CompleteBtn id={content.id} />
+                                        {takes[content.id-1].take ?
+                                            <CompleteBtn id={10*(currentPage-1)+1} />
                                             :
-                                            <TakeBtn id={content.id} />
+                                            <TakeBtn id={10*(currentPage-1)+1} />
                                             }
                                     </td>
                                 </ExamBody>

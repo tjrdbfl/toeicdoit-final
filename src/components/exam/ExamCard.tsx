@@ -7,14 +7,18 @@ import {
 import Image from "next/image";
 import { FC } from "react";
 import dynamic from 'next/dynamic';
+import { useResultStore, useTakeStore } from "@/store/toeic/store";
 
 const ToeicModalBtn = dynamic(() => import('../toeic/ToeicModalBtn'), { ssr: false });
 
 interface ExamCardProps {
   toeic: ToeicProblemType;
+  toeicId:number;
 }
-const ExamCard: FC<ExamCardProps> = ({toeic}) => {
-  
+const ExamCard: FC<ExamCardProps> = ({toeic,toeicId}) => {
+
+  const {takes}=useTakeStore();
+
   return (
     <>
       <div key={toeic.id} className={`flex flex-col justify-center mx-3 ${toeic.part==="3" || toeic.part==="4" ?'mr-20':''}`}>
@@ -95,7 +99,7 @@ const ExamCard: FC<ExamCardProps> = ({toeic}) => {
           )}
         </div>
 
-        {toeic.take && (
+        {takes[toeicId].take && (
            <ToeicModalBtn
            id={1}
            label={"해설 보기"}

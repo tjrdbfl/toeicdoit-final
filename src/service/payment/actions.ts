@@ -10,6 +10,8 @@ import { I_ApiPaymentRequest, PaymentModel } from "@/types/TransactionData";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { checkTokenExist } from "../utils/token";
+import { extractCookie } from "../utils/extract";
+import { logout } from "../auth/actions";
 
 export async function getPaymentInfoById() {
     console.log('getPaymentInfoById');
@@ -140,6 +142,23 @@ export async function handlePayment(imp_uid: string, paid_amount: number, produc
                     console.log('상품 결제 전송 완료: '+JSON.stringify(paymentResult));
 
                     if (paymentResult.state) {
+                        
+                        const refreshToken=cookies().get('refreshToken')?.value;
+
+                        if(refreshToken===undefined){
+                            logout();
+                        }else{
+                            cookies().delete('payment');
+                            cookies().set({
+                                name: 'payment',
+                                value: 'true',
+                                maxAge: Number(extractCookie(refreshToken, 'Max-Age')),
+                                expires: new Date(extractCookie(refreshToken, 'Expires')),
+                                sameSite: 'lax',
+                                httpOnly: true,
+                                path: '/'
+                            });
+                        }
                         console.log('payment success');
                         return { message: 'SUCCESS' };
                     } else {
@@ -187,6 +206,24 @@ export async function paymentRefund(paymentResult: PaymentModel) {
                 console.log('paymentRefund: ' + JSON.stringify(result));
 
                 if (result.state) {
+                    const refreshToken=cookies().get('refreshToken')?.value;
+
+                    if(refreshToken===undefined){
+                        logout();
+                    }else{
+                        cookies().delete('payment');
+                        cookies().set({
+                            name: 'payment',
+                            value: 'false',
+                            maxAge: Number(extractCookie(refreshToken, 'Max-Age')),
+                            expires: new Date(extractCookie(refreshToken, 'Expires')),
+                            sameSite: 'lax',
+                            httpOnly: true,
+                            path: '/'
+                        });
+
+                    }
+
                     revalidatePath(`${PG.USER_INFO}`);
 
                     return { status: 200 };

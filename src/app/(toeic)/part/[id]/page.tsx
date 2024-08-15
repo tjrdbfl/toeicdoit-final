@@ -54,7 +54,7 @@ export default async function PartPracticePage({ params,searchParams }: {
             <ToeicHeader label={`토익두잇 파트 ${params.id} 연습문제`} />
         </div>
 
-        <ToeicControl sound={'https://kr.object.ncloudstorage.com/toeicdoit/%EC%9D%8C%EC%9B%90%ED%8C%8C%EC%9D%BC/%ED%8C%8C%ED%8A%B8%EB%B3%84%20%EC%9D%8C%EC%9B%90.mp3'} numberOfQuestions={toeic[0].toeicIds.length} type={"practice"} />
+        <ToeicControl sound={'https://kr.object.ncloudstorage.com/toeicdoit/%EC%9D%8C%EC%9B%90%ED%8C%8C%EC%9D%BC/%ED%8C%8C%ED%8A%B8%EB%B3%84%20%EC%9D%8C%EC%9B%90.mp3'} numberOfQuestions={toeic[0].toeicIds.length} type={"practice"} toeicId={0} />
         
         <div className="flex flex-row items-start justify-center gap-x-16 mt-5">
             <div className="px:px-[10%] md:w-[350px] lg:px-[23%] lg:w-[800px] xl:px-[25%] xl:w-[900px] 2xl:px-[27%] 2xl:w-[900px] flex flex-col mt-5">

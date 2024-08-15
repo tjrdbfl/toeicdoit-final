@@ -1,18 +1,19 @@
 'use client';
 import { formattedTime } from "@/service/utils/date";
+import { useTakeStore } from "@/store/toeic/store";
 import { useExamTimerStore, usePracticeTimerStore } from "@/store/toeic/timer"
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const ToeicTimer = () => {
     const { timeElapsed,startTimer,resetTimer, isRunning,isPaused } = usePracticeTimerStore();
-
+    
     const INTERVAL = 1000;
     
     useEffect(() => {
-        startTimer(0);
-        
-        return () => {
+      startTimer(0);
+    
+      return () => {
           resetTimer();
         };
       }, []);

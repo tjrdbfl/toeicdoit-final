@@ -4,27 +4,77 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 type ResultStore = {
-  name:string,
-  type:string,
+  type: string,
   BarData: number[],
   score: number,
   lc_score: number,
   rc_score: number,
   timeElapsed: number,
+  toeicId: number,
+  name:string,
 }
 export const useResultStore = create<ResultStore>()(
   persist(
     (set) => ({
-      name:'',
-      type:'',
+      type: '',
       BarData: [],
-      score:0,
-      lc_score:0,
-      rc_score:0,
-      timeElapsed:0,
+      score: 0,
+      lc_score: 0,
+      rc_score: 0,
+      timeElapsed: 0,
+      toeicId: 0,
+      name:'',
+      }),{
+        name: 'ResultStore',
+        storage: createJSONStorage(() => sessionStorage),
+      }),
+);
+
+
+type Take = {
+  toeicId: number,
+  take: boolean
+};
+type TakeStore = {
+  takes: Take[]
+  setTake: (
+    toeicId: number,
+    take: boolean) => void;
+  initialize: () => void
+}
+export const useTakeStore = create<TakeStore>()(
+  persist(
+    (set) => ({
+      takes: Array.from({ length: 200 }, (_, index) => ({
+        toeicId: index + 1,
+        take: false
+      })),
+      setTake: (toeicId, take) =>
+        set((state) => {
+
+          const existingAnswerIndex = state.takes.findIndex(
+            (take) => take.toeicId === toeicId
+          );
+
+          if (existingAnswerIndex !== -1) {
+            const updatedAnswers = [...state.takes];
+            updatedAnswers[existingAnswerIndex].take = take;
+
+            return { takes: updatedAnswers };
+          } else {
+            return { takes: [...state.takes, { toeicId, take }] };
+          }
+        }),
+      initialize: () =>
+        set({
+          takes: Array.from({ length: 200 }, (_, index) => ({
+            toeicId: index + 1,
+            take: false
+          }))
+        })
     }),
     {
-      name: 'toeic-result',
+      name: 'TakeStore',
       storage: createJSONStorage(() => sessionStorage),
     }
   )
@@ -100,26 +150,27 @@ export const useToeicAnswerStore = create<ToeicAnswerStore>()(
 type ExamAnswer = {
   toeicId: number;
   answer: string;
-  part:number;
+  part: number;
 };
 
 type ExamAnswerStore = {
   answers: ExamAnswer[];
-  setAnswer: (questionId: number, selectedAnswer: string,part:number) => void;
+  setAnswer: (questionId: number, selectedAnswer: string, part: number) => void;
+  initialize: () => void
 };
 
 export const useExamAnswerStore = create<ExamAnswerStore>()(
   persist(
     (set) => ({
-      answers: Array.from({ length: 200 }, (_, index) => ({ 
-        toeicId: index+1, 
-        answer: '', 
-        part: 0 
-      })), // 초기에는 빈 배열로 설정
-      setAnswer: (questionId, selectedAnswer,part) =>
+      answers: Array.from({ length: 200 }, (_, index) => ({
+        toeicId: index + 1,
+        answer: '',
+        part: 0
+      })),
+      setAnswer: (questionId, selectedAnswer, part) =>
         set((state) => {
-          console.log('part: '+part);
-        
+          console.log('part: ' + part);
+
 
           const existingAnswerIndex = state.answers.findIndex(
             (answer) => answer.toeicId === questionId
@@ -128,17 +179,25 @@ export const useExamAnswerStore = create<ExamAnswerStore>()(
           if (existingAnswerIndex !== -1) {
             const updatedAnswers = [...state.answers];
             updatedAnswers[existingAnswerIndex].answer = selectedAnswer;
-            updatedAnswers[existingAnswerIndex].part=part;
+            updatedAnswers[existingAnswerIndex].part = part;
             return { answers: updatedAnswers };
           } else {
-            return { answers: [...state.answers, { toeicId: questionId, answer: selectedAnswer,part:part}] };
+            return { answers: [...state.answers, { toeicId: questionId, answer: selectedAnswer, part: part }] };
           }
         }),
+      initialize: () =>
+        set({
+          answers: Array.from({ length: 200 }, (_, index) => ({
+            toeicId: index + 1,
+            answer: '',
+            part: 0
+          }))
+        })
     }),
     {
       name: 'ExamAnswerStore',
       storage: createJSONStorage(() => sessionStorage),
-  
+
     }
   )
 );

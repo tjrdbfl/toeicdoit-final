@@ -1,11 +1,12 @@
 'use server';
 
 import { AuthorizeHeader, CommonHeader } from "@/config/headers";
-import { ITEMS_PER_PAGE, resultChartData, ToeicDataPublic } from "@/types/ToeicData";
+import { ITEMS_PER_PAGE, ResultChartData, resultChartData, ToeicDataPublic } from "@/types/ToeicData";
 import { redirect } from "next/navigation";
 import { checkTokenExist } from "../utils/token";
 import { ERROR } from "@/constants/enums/ERROR";
 import { cookies } from "next/headers";
+import { MessageData } from "@/types/MessengerData";
 
 export async function fetchQuestions({ 
     pageParam = 1, level
@@ -126,14 +127,18 @@ export async function submitExamAnswer(toeicId:number,time:number,formData: Form
                 const accessToken=cookies().get('accessToken')?.value;
                 const name=cookies().get('name')?.value;
     
+
+                console.log('time: '+time);
+                console.log('toeicId: '+toeicId);
+
                 const response=await fetch(`${process.env.NEXT_PUBLIC_TOEIC_API_URL}/api/toeic/exam/save`,{
                     method:'POST',
                     headers:AuthorizeHeader(accessToken),
                     body:JSON.stringify({
-                        timeElapsed:time,
-                        data:selections,
                         userId:1,
-                        toeicCategoryId:toeicId
+                        timeElapsed:time,
+                        toeicCategoryId:toeicId,
+                        data:selections,
                     }),
                     cache:"no-store"
                 })
@@ -141,20 +146,64 @@ export async function submitExamAnswer(toeicId:number,time:number,formData: Form
                 console.log('response submitAnswer status: ',response.status);
                 
                 if (response.status === 200) {
-                    const data:resultChartData=await response.json();
-                    return {message:'SUCCESS',data:data,name:name};
+                    const result:MessageData=await response.json();
+
+                    console.log('submitAnswer: '+JSON.stringify(result.data));
+                    return {message:'SUCCESS',data:result.data as ResultChartData,name:name};
                 }else{
                     return {message:ERROR.SERVER_ERROR};
                 }
             
             }catch(err){
+                console.log(err);
                 return {message:ERROR.SERVER_ERROR};
             }   
         }
        
     }
-    
-    
+       
+}
 
+export async function findSolveHistoryByUserId(selected:number){
+    console.log('findSolveHistoryByUserId: '+selected);
+
+    const checkResposnse = await checkTokenExist();
+
+    console.log('checkResposnse: ' + checkResposnse?.message);
+
+    if (checkResposnse?.message === 'LOGOUT') {
+        return { message: ERROR.INVALID_MEMBER };
+    } else if (checkResposnse?.status === 500 || checkResposnse?.status === 401) {
+        return { message: ERROR.INVALID_MEMBER };
+    } else {
+        const userId=cookies().get('userId')?.value;
+        const accessToken=cookies().get('accessToken')?.value;
+                
+        if(userId===undefined || accessToken===undefined){
+            return {message:ERROR.INVALID_MEMBER};
+        }else{
+            const type=selected===1? 1:selected===2? 3:selected===3? 4:2;
+            
+            try{
+                const response=await fetch(`${process.env.NEXT_PUBLIC_TOEIC_API_URL}/api/toeic/exam/user/score/${1}/${type}`,{
+                    method:'GET',
+                   headers:AuthorizeHeader(accessToken),
+                   cache:'no-store'
+                });
     
+                console.log('findSolveHistoryByUserId: '+response.status);
+               
+                if(response.status===200){
+                    const result=await response.json();
+                    console.log('findSolveHistoryByUserId: '+result);
+                    return {message:'SUCCESS',data:result};
+                }else{
+                    return {message:ERROR.SERVER_ERROR};     
+                }
+            }catch(err){
+                return {message:ERROR.SERVER_ERROR};
+            }
+                
+        }
+    }
 }

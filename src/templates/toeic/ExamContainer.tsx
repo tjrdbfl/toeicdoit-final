@@ -5,7 +5,7 @@ import { allParts } from "@/constants/toeic/exam";
 import ExamCard from "@/components/exam/ExamCard";
 import { ToeicProblemType } from "@/types/ToeicData";
 
-export default function ExamContainer({ toeicIds }: { toeicIds: ToeicProblemType[] }) {
+export default function ExamContainer({ toeicIds,toeicId }: { toeicIds: ToeicProblemType[],toeicId:number }) {
   const [selectedTab, setSelectedTab] = useState(allParts[0].label);
   const partRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
@@ -56,6 +56,7 @@ export default function ExamContainer({ toeicIds }: { toeicIds: ToeicProblemType
               ref={setPartRef(`${classifyQuestion(item.id)}`)}
             >
               <ExamCard
+              toeicId={toeicId}
                 key={item.id}
                 toeic={item}
               />

@@ -51,5 +51,5 @@ export function calculateTimeData(score:number){
 }
 
 export function calculateTime(time:number){
-    return {hour:Math.floor(time/60),minute:time%60};
+    return {minute:Math.floor(time/60),seconds:time%60};
 }

@@ -1,16 +1,20 @@
 "use client";
 
 import { PG } from "@/constants/enums/PG";
-import { useResultStore } from "@/store/toeic/store";
+import { useExamAnswerStore, useResultStore } from "@/store/toeic/store";
 import { useRouter } from "next/navigation";
 
-const ScoreBtn=({label,type}:{label:string,type:string})=>{
+const ScoreBtn=({label,type,option,toeicId}:{label:string,type:string,option:number,toeicId:number})=>{
 
     const router=useRouter();
     const url=type==='exam'?`${PG.EXAM}`:type==='level'?`${PG.LEVEL}`:type==='part'? `${PG.PART}`:`${PG.LEVEL_TEST}`;
 
+    const {initialize}=useExamAnswerStore();
+
     const handleClick=()=>{
         router.push(url);
+
+
         useResultStore.setState({
             BarData:[],
             score:0,
@@ -19,8 +23,17 @@ const ScoreBtn=({label,type}:{label:string,type:string})=>{
             timeElapsed:0,
             name:'',
             type:'',
-        });
-        
+            toeicId:0,
+          }
+        );
+
+        if(option===2){
+            initialize();
+            router.push(url);
+        }else{
+            router.push(`${url}/${toeicId}`);
+        }
+       
     }
     
     return(<>

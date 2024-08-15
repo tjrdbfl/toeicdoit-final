@@ -1,88 +1,88 @@
 import { MessageData } from "./MessengerData";
 
-export type ToeicData={
-    id:number;
-    part:number;
-    level:number;
-    quesiton:string;
-    answer:string;
-    numberOfQuestions:number;
-    description:string;
-    image:string;
-    sound:string;
-    script:string;
-    createdAt:Date;
-    updatedAt:Date;
-    title:string;
-    take:boolean;
-    option:OptionData;
-    result:ResultData;
+export type ToeicData = {
+    id: number;
+    part: number;
+    level: number;
+    quesiton: string;
+    answer: string;
+    numberOfQuestions: number;
+    description: string;
+    image: string;
+    sound: string;
+    script: string;
+    createdAt: Date;
+    updatedAt: Date;
+    title: string;
+    take: boolean;
+    option: OptionData;
+    result: ResultData;
 }
-export type OptionData={
-    id:number;
-    choice1:string;
-    choice2:string;
-    choice3:string;
-    choice4:string;
+export type OptionData = {
+    id: number;
+    choice1: string;
+    choice2: string;
+    choice3: string;
+    choice4: string;
 }
-export type ResultData={
-    id:number;
-    result:boolean;
-    userAnswer:AnswerData[];
-    isCorrect:boolean;
-    createdAt:Date;
-    updatedAt:Date;
+export type ResultData = {
+    id: number;
+    result: boolean;
+    userAnswer: AnswerData[];
+    isCorrect: boolean;
+    createdAt: Date;
+    updatedAt: Date;
 }
-export type AnswerData={
-    id:number;
-    answer:string;
+export type AnswerData = {
+    id: number;
+    answer: string;
 }
-export type ToeicProblemType={
-    id:number,
-    question:string,
-    description:string,
-    image:string,
-    take:boolean,
-    optionId:OptionData,
-    answer:string,
-    part:string,
-    level:number,
+export type ToeicProblemType = {
+    id: number,
+    question: string,
+    description: string,
+    image: string,
+    take: boolean,
+    optionId: OptionData,
+    answer: string,
+    part: string,
+    level: number,
 }
-export type ToeicProblemData=[{
-    id:number,
-    sound:string,
-    title:string,
-    toeicIds:ToeicProblemType[],
-    numberOfQuestions:number,
-    testType:string,
+export type ToeicProblemData = [{
+    id: number,
+    sound: string,
+    title: string,
+    toeicIds: ToeicProblemType[],
+    numberOfQuestions: number,
+    testType: string,
 }];
 
-export type resultChartData={
-    BarData:number[],
-    score:number,
-    lc_score:number,
-    rc_score:number,
-    timeElapsed:number,
+export type resultChartData = {
+    BarData: number[],
+    score: number,
+    lc_score: number,
+    rc_score: number,
+    timeElapsed: number,
 }
-export type ToeicDataPublic={
-    id:ToeicData['id'],
-    question:ToeicData['quesiton'];
-    part:ToeicData['part'];
-    image:ToeicData['image'];
-    sound:ToeicData['sound'];
-    numberOfQuestions:ToeicData['numberOfQuestions'];
-    option:ToeicData['option'];
-    take:ToeicData['take'];
-    answer:ToeicData['answer'];
-    description:ToeicData['description'];
-    script:ToeicData['script'];
+export type ToeicDataPublic = {
+    id: ToeicData['id'],
+    question: ToeicData['quesiton'];
+    part: ToeicData['part'];
+    image: ToeicData['image'];
+    sound: ToeicData['sound'];
+    numberOfQuestions: ToeicData['numberOfQuestions'];
+    option: ToeicData['option'];
+    take: ToeicData['take'];
+    answer: ToeicData['answer'];
+    description: ToeicData['description'];
+    script: ToeicData['script'];
 }
-export type OptionDataPublic={
-    id:OptionData['id'];
-    choice1:OptionData['choice1'];
-    choice2:OptionData['choice2'];
-    choice3:OptionData['choice3'];
-    choice4:OptionData['choice4'];
+export type OptionDataPublic = {
+    id: OptionData['id'];
+    choice1: OptionData['choice1'];
+    choice2: OptionData['choice2'];
+    choice3: OptionData['choice3'];
+    choice4: OptionData['choice4'];
 }
 
 export type ChartData = {
@@ -91,18 +91,37 @@ export type ChartData = {
     LC_score: number;
     RC_Score: number;
     RadarData: number[];     //듣기, 어휘, 구조, 문법, 독해 별 정보
-    timeElapsed:number;
+    timeElapsed: number;
 }
 export const ITEMS_PER_PAGE = 10;
-export const CURRENT_TOTAL_PAGE=10;
+export const CURRENT_TOTAL_PAGE = 10;
 
-export interface I_ApiLevelTestRequest{
-    currentPage?:number;
-    level:number;
+export interface I_ApiLevelTestRequest {
+    currentPage?: number;
+    level: number;
 }
-export interface I_ApiLevelTestResponse{
-    totalPages?:number;
-    questions:ToeicDataPublic;
-    success:boolean;
-    message?:MessageData;
+export interface I_ApiLevelTestResponse {
+    totalPages?: number;
+    questions: ToeicDataPublic;
+    success: boolean;
+    message?: MessageData;
+}
+export type ResultChartData = {
+    id: number,
+    userId: number,
+    toeicCategoryId: number,
+    toeicId: |null,
+    timeElapsed: number,
+    score:number,
+    lcScore:number,
+    rcScore: number,
+    scorePart1: number,
+    scorePart2: number,
+    scorePart3: number,
+    scorePart4: number,
+    scorePart5: number,
+    scorePart6: number,
+    scorePart7: number,
+    barData:number[],
+    take:boolean
 }

@@ -15,10 +15,12 @@ const ToeicControl = ({
   type,
   sound,
   numberOfQuestions,
+  toeicId
 }: {
   type: "practice" | "exam";
   sound: string;
   numberOfQuestions: number;
+  toeicId:number;
 }) => {
   const { count } = useNumberOfQuestionStore();
 
@@ -50,7 +52,7 @@ const ToeicControl = ({
                 <ToeicTimer />
               ) : (
                 <div className="flex flex-row gap-x-2">
-                  <ExamTimer />
+                  <ExamTimer toeicId={toeicId}/>
                   <p className="text-black font-semibold text-[16px]">/ 120분</p>
                 </div>
               )}
