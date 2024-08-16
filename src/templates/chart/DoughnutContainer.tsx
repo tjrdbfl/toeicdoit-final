@@ -14,6 +14,7 @@ const DoughnutContainer = ({
         seconds: number;
     }
 }) => {
+  console.log('DoughnutContainer: ',DoughnutUserTime);
     return (
         <>
               <div className="w-[300px]">

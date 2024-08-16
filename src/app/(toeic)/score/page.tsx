@@ -14,10 +14,12 @@ import {
 } from "@/service/toeic/util";
 import DoughnutContainer from "@/templates/chart/DoughnutContainer";
 import { useResultStore } from "@/store/toeic/store";
+import { useEffect, useState } from "react";
 
 export default function ScorePage() {
 
-  const {type,name,score,lc_score,rc_score,BarData,timeElapsed,toeicId}=useResultStore();
+  const { type, name, score, lc_score, rc_score, BarData, timeElapsed, toeicId } = useResultStore();
+  const [formattedTime, setFormattedTime] = useState<string|null>(null);
 
   const UserBarData = {
     label: "내 파트별 실력",
@@ -46,15 +48,27 @@ export default function ScorePage() {
     ["독해", `${LevelRadarData[4]}/90`],
   ];
 
-  console.log(`${Math.floor(timeElapsed/60000)} : ${Math.floor((timeElapsed/1000%60))}`)
- 
-  const DoughnutUserData = [Math.floor((Math.floor(timeElapsed/60000)*60+Math.floor(timeElapsed/1000))/60), (120*60 - Math.floor(timeElapsed/60000))/60];
+  useEffect(() => {
+    if (timeElapsed > 0) {
+      const minutes = Math.floor(timeElapsed / 60000);
+      const seconds = Math.floor((timeElapsed / 1000) % 60).toString().padStart(2, '0');
+      setFormattedTime(`${minutes} : ${seconds}`);
+    }
+  }, [timeElapsed]);
+
+  const DoughnutUserData = [
+    Math.floor((Math.floor(timeElapsed / 60000) * 60 + Math.floor(timeElapsed / 1000)) / 60),
+    Math.floor((120 * 60 - Math.floor(timeElapsed / 60000)) / 60)
+  ];
+
+
+  //const DoughnutUserData = [Math.floor((Math.floor(timeElapsed/60000)*60+Math.floor(timeElapsed/1000))/60), Math.floor((120*60 - Math.floor(timeElapsed/60000))/60)];
   const DoughnutOtherData = [
     calculateTimeData(score),
     120 - calculateTimeData(score),
   ];
 
-  console.log('type: ',type)
+  console.log('type: ', type)
   const DoughnutOtherTime = calculateTime(calculateTimeData(score));
 
   return (
@@ -75,13 +89,15 @@ export default function ScorePage() {
               LevelRadarData={LevelRadarData}
               labels={radarLabel}
             />
-            <DoughnutContainer
-              score={score}
-              DoughnutUserData={DoughnutUserData}
-              DoughnutOtherData={DoughnutOtherData}
-              DoughnutUserTime={`${Math.floor(timeElapsed/60000)} : ${Math.floor((timeElapsed/1000%60))}`}
-              DoughnutOtherTime={DoughnutOtherTime}
-            />
+            {formattedTime!==null && (
+              <DoughnutContainer
+                score={score}
+                DoughnutUserData={DoughnutUserData}
+                DoughnutOtherData={DoughnutOtherData}
+                DoughnutUserTime={formattedTime}
+                DoughnutOtherTime={DoughnutOtherTime}
+              />
+            )}
           </div>
 
           <div className="mt-10" />
@@ -102,8 +118,8 @@ export default function ScorePage() {
           <div className="mt-10" />
 
           <div className="flex flex-row justify-center gap-x-10">
-            <ScoreBtn type={type} label={"오답 하러 가기"} option={1} toeicId={toeicId}/>
-            <ScoreBtn type={type} label={"응시하기 전으로 돌아가기"} option={2} toeicId={toeicId}/>
+            <ScoreBtn type={type} label={"오답 하러 가기"} option={1} toeicId={toeicId} />
+            <ScoreBtn type={type} label={"응시하기 전으로 돌아가기"} option={2} toeicId={toeicId} />
           </div>
         </div>
       </div>
