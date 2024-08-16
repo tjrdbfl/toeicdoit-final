@@ -294,6 +294,8 @@ export async function logout() {
 
             if (response.status === 200) {
 
+                cookies().set('accessToken','',{maxAge:0,domain:'.toeicdoit.site'});
+                cookies().set('refreshToken','',{maxAge:0,domain:'.toeicdoit.site'});
                 cookies().delete('accessToken');
                 cookies().delete('refreshToken');
                 cookies().delete('email');
@@ -307,6 +309,10 @@ export async function logout() {
 
                 return { message: 'SUCCESS' };
             } else {
+
+                cookies().set('accessToken','',{maxAge:0,domain:'.toeicdoit.site'});
+                cookies().set('refreshToken','',{maxAge:0,domain:'.toeicdoit.site'});
+               
                 cookies().delete('accessToken');
                 cookies().delete('refreshToken');
                 cookies().delete('email');
