@@ -1,4 +1,3 @@
-'use client';
 import GoogleAuthBtn from "@/components/button/GoogleAuthBtn";
 import RegisterBtn from "@/components/auth/RegisterBtn";
 import LoginForm from "@/templates/auth/LoginForm";
@@ -12,28 +11,7 @@ import { useRouter } from "next/navigation";
 
 
 export default function LoginPage() {
-    const router=useRouter();
-
-    const handleCookie=async()=>{
-        const response=await setCookie();
-       
-        console.log('setCookie: '+response.status);
-        
-        if(response.status===200){
-            const response=await getUserInfoInCookie();
-
-            console.log(JSON.stringify(response));
-            router.push('/');   
-        }else{
-            alert(ERROR.SERVER_ERROR);
-            router.push(`${PG.LOGIN}`);
-        }
-    }
-
-    useEffect(()=>{
-        handleCookie();
-    },[]);
-
+   
     return (<>
         <div className="form w-[500px] p-10">
             <p className="form_title">로그인</p>

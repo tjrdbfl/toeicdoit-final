@@ -292,12 +292,12 @@ export async function logout() {
             console.log('response logout: ' + JSON.stringify(response.status));
             console.log('response logout: ' + JSON.stringify(response.statusText));
 
+            const deleteCookieOptions = { path: '/', domain: '.toeicdoit.site',expires:new Date(0) };
+
             if (response.status === 200) {
 
-                cookies().set('accessToken','',{maxAge:0,domain:'.toeicdoit.site'});
-                cookies().set('refreshToken','',{maxAge:0,domain:'.toeicdoit.site'});
-                cookies().delete('accessToken');
-                cookies().delete('refreshToken');
+                cookies().set('accessToken','',deleteCookieOptions);
+                cookies().set('refreshToken','',deleteCookieOptions);
                 cookies().delete('email');
                 cookies().delete('roles');
                 cookies().delete('userId');
@@ -309,12 +309,11 @@ export async function logout() {
 
                 return { message: 'SUCCESS' };
             } else {
-
-                cookies().set('accessToken','',{maxAge:0,domain:'.toeicdoit.site'});
-                cookies().set('refreshToken','',{maxAge:0,domain:'.toeicdoit.site'});
-               
-                cookies().delete('accessToken');
-                cookies().delete('refreshToken');
+                cookies().set('accessToken','',deleteCookieOptions);
+                cookies().set('refreshToken','',deleteCookieOptions);
+             
+                // cookies().delete('accessToken');
+                // cookies().delete('refreshToken');
                 cookies().delete('email');
                 cookies().delete('roles');
                 cookies().delete('userId');
@@ -322,6 +321,7 @@ export async function logout() {
                 cookies().delete('toeicLevel');
                 cookies().delete('profile');
                 cookies().delete('SESSION');
+                cookies().delete('payment');
 
                 return { message: ERROR.SERVER_ERROR };
             }

@@ -176,6 +176,18 @@ export async function getUserInfoInCookie() {
 
 }
 
+export async function getToken(){
+
+    const accessToken = cookies().get('accessToken')?.value;
+    const refreshToken = cookies().get('refreshToken')?.value;
+4
+    if(accessToken!==undefined && refreshToken!==undefined){
+        return {status:200};
+    }else{
+        return {status:500};
+    }
+  
+}
 export async function setCookie() {
     console.log('setCookie');
 
