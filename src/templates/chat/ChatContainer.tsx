@@ -25,7 +25,7 @@ const ChatContainer = async () => {
         }
 
         const userId=cookies().get('userId')?.value;
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${SERVER.CHAT}/${SERVER_API.ROOM}/find-by?field=all&size=10&page=0&sort=createdAt,desc&senderId=${userId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${SERVER.CHAT}/${SERVER_API.ROOM}/find-by?field=senderId&size=10&page=0&sort=createdAt,desc&value=${userId}`, {
             method: 'GET',
             headers:AuthorizeHeader(accessToken),
             cache: 'no-store'

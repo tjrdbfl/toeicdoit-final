@@ -31,6 +31,7 @@ export default async function LevelPracticePage({ params, searchParams }: {
 
     const currentPage = Number(searchParams.page) || 0;
     const name=cookies().get('name')?.value;
+    console.log(toeic[0].toeicIds.length);
     
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_TOEIC_API_URL}/api/${SERVER_API.TOEIC}/level/${params.id}`, {
