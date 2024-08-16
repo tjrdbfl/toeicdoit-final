@@ -119,7 +119,7 @@ const PaymentContainer = () => {
                 onClick={handlePurchaseClick}
                 className="form_submit_btn mt-3"
             >
-                상품 구매하기
+                상품 구매하기 
             </button>
         </div>
 
