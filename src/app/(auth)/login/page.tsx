@@ -6,8 +6,9 @@ import Link from "next/link";
 import { PG } from "@/constants/enums/PG";
 import { ERROR } from "@/constants/enums/ERROR";
 import { getUserInfoInCookie, setCookie } from "@/service/utils/token";
-import { useRouter } from "next/router";
+
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 
 export default function LoginPage() {
