@@ -62,10 +62,6 @@ export const ModifyPasswordSchema = z.object({
 })
 
 export const RegisterSchema = z.object({
-    // email: z.string(),
-    // password: z.string(),
-    // name: z.string(),
-    // phone: z.string(),
     email: z.string().email({
         message: "유효한 이메일 형식이 아닙니다. " 
     }).min(1,{
