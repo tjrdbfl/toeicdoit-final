@@ -162,7 +162,7 @@ export default function FreeSaveForm() {
             name="content"
             id="content"
             required
-            className="form_input"
+            className="form_input scroll-area"
             placeholder="필수 항목입니다."
             style={{ height: 250 }}
             maxLength={1000}

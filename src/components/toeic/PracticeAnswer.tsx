@@ -2,26 +2,32 @@
 
 import SubmitButton from "@/components/button/SubmitBtn";
 import { ScrollArea, ScrollBar } from "@/components/utils/ScrollArea";
+import { PG } from "@/constants/enums/PG";
 import { ExamPart, allParts } from "@/constants/toeic/exam";
-import { submitAnswer } from "@/service/toeic/actions";
-import { useNumberOfQuestionStore } from "@/store/toeic/store";
+import { submitAnswer, submitExamAnswer } from "@/service/toeic/actions";
+import { classifyPart } from "@/service/toeic/items";
+import { useExamAnswerStore, useNumberOfQuestionStore, useResultStore } from "@/store/toeic/store";
+import { usePracticeTimerStore } from "@/store/toeic/timer";
 import Link from "next/link";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 const PracticeAnswer = ({
-    part, label, count, id,type
+    part, label, count, id,type,name
 }: {
     id: number,
     part: number,
     label: string,
     count: number,
-    type:string
+    type:string,
+    name:string
 }) => {
 
     const option1: string[] = ['a', 'b', 'c', 'd'];
     const option2: string[] = ['a', 'b', 'c'];
-    const [selections, setSelections] = useState<{ [key: number]: string }>({});
-
+    const [select, setSelect] = useState<{ [key: number]: boolean }>({});
+    const { answers, setAnswer } = useExamAnswerStore();
+    const { timeElapsed } = usePracticeTimerStore();
+    
     let initialAnswers: boolean[] = [];
     for (let i = 1; i <= count; i++) {
         initialAnswers[i] = false;
@@ -30,7 +36,11 @@ const PracticeAnswer = ({
     const [questionNumbers, setQuestionNumbers] = useState<{ [key: number]: boolean }>(initialAnswers);
     
     const handleSelect = (questionId: number, value: string) => {
-        setSelections((prevSelections) => ({ ...prevSelections, [questionId]: value }));
+        setAnswer(questionId, value, classifyPart(questionId));
+        setSelect((prevAnswers) => ({
+            ...prevAnswers,
+            [questionId]: value !== ''
+        }));
         setQuestionNumbers((prevAnswers) => ({
             ...prevAnswers,
             [questionId]: value !== ''
@@ -43,8 +53,31 @@ const PracticeAnswer = ({
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        formData.append('selections', JSON.stringify(selections));
-        await submitAnswer('level',formData);
+        formData.append('selections', JSON.stringify(answers));
+
+        const response = await submitExamAnswer(3, timeElapsed, formData);
+
+        if (response.message === 'SUCCESS' && response.data !== undefined) {
+            useResultStore.setState(
+                {
+                    name: name,
+                    type: type,
+                    BarData: response.data.barData,
+                    score: response.data.score,
+                    lc_score: response.data.lcScore,
+                    rc_score: response.data.rcScore,
+                    timeElapsed: response.data.timeElapsed,
+                    toeicId: 0,
+                    take: true
+                });
+
+            console.log('userResultStore : ', name);
+            if (name !== '') {
+                window.location.replace(`${PG.SCORE}`);
+            }
+        } else {
+            alert(response.message);
+        }
     };
 
     return (
@@ -81,12 +114,12 @@ const PracticeAnswer = ({
                                                 onChange={() => handleSelect(questionNumber, option)}
                                                 className="hidden"
                                             />
-                                            <label
-                                                htmlFor={`${questionNumber}-${option}`}
-                                                className={`text-black w-4 h-4 text-[12px] rounded-full ring-1 ring-black flex items-center justify-center cursor-pointer 
+                                             <label
+                                                        htmlFor={`${questionNumber}-${option}`}
+                                                        className={`text-black w-4 h-4 text-[14px] rounded-full ring-1 ring-black flex items-center justify-center cursor-pointer 
                                                             hover:bg-blue-50 hover:ring-2 hover:ring-blue-600 
-                                                            ${selections[questionNumber] === option ? 'bg-blue-200' : 'bg-white'}`}
-                                            >
+                                                            ${answers[questionNumber - 1]?.answer === option ? 'bg-blue-200' : 'bg-white'}`}
+                                                >
                                                 {option.toUpperCase()}
                                             </label>
                                         </div>

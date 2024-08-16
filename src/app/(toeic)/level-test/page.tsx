@@ -159,7 +159,7 @@ export default function LevelTestPage() {
                   score={result.score}
                   DoughnutUserData={DoughnutUserData}
                   DoughnutOtherData={DoughnutOtherData}
-                  DoughnutUserTime={DoughnutUserTime}
+                  DoughnutUserTime={`${Math.floor(result.timeElapsed/60000)} : ${Math.floor((result.timeElapsed/1000%60))}`}
                   DoughnutOtherTime={DoughnutOtherTime}
                 />
               </div>

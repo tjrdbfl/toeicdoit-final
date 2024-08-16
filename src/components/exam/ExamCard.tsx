@@ -17,7 +17,7 @@ interface ExamCardProps {
 }
 const ExamCard: FC<ExamCardProps> = ({toeic,toeicId}) => {
 
-  const {takes}=useTakeStore();
+  const {take}=useResultStore();
 
   return (
     <>
@@ -99,7 +99,7 @@ const ExamCard: FC<ExamCardProps> = ({toeic,toeicId}) => {
           )}
         </div>
 
-        {takes[toeicId].take && (
+        {take && (
            <ToeicModalBtn
            id={1}
            label={"해설 보기"}

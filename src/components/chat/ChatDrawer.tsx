@@ -23,9 +23,10 @@ const ChatDrawer = ({ room }: {
     const handlebutton = async () => {
         setOpenModal(true);
 
-        const findNameProfile = await findByNameProfile(countUniqueMember(room.adminIds,room.memberIds));
+        const findNameProfile = await findByNameProfile(room.memberIds.map((mem)=>parseInt(mem)));
         const result=await findNameProfile.data;
 
+        console.log('findNameProfile: '+JSON.stringify(result));
         if(result!==undefined){
             const userResult=result?.map((item)=>({
                 userId:item.userId.toString(),

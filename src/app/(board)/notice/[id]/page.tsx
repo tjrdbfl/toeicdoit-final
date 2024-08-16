@@ -18,22 +18,33 @@ export default async function NoticeDetailPage({ params }: {
 }) {
 
     let totalPages: number = 0;
-    let notices: BoardData[] = [];
+    let notices: BoardData = {
+        id: 0,
+        title: "",
+        content: "",
+        userId: 0,
+        writerName: "",
+        type: "notice",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    };
     let totalElements: number = 0;
 
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${SERVER.USER}/public/${SERVER_API.BOARD}/findBy?type=notice&page=${params.id}&size=1`, {
             method: 'GET',
             headers: CommonHeader,
-            next: { revalidate: 60 * 60 }
+            cache:'no-store'
         });
-        const result:MessageData=await response.json();
-        const data = result.data as I_ApiBoardResponse;
+        const data: I_ApiBoardResponse = await response.json();
 
         if (data) {
-            notices = data.content;
+            notices = data.content[0];
             totalPages = data.totalPages;
             totalElements = data.totalElements;
+            
+            console.log('totalElements: '+totalElements);
+
         } else {
             console.error('Failed to get response data by find-by-types' + ERROR.SERVER_ERROR);
         }
@@ -45,7 +56,7 @@ export default async function NoticeDetailPage({ params }: {
 
     return (<>
         <div className="px-28 py-20">
-            <div className="px-80 mb-5">
+            <div className="xl:px-80 mb-5">
                 <NoticeLink />
             </div>
 
@@ -53,17 +64,17 @@ export default async function NoticeDetailPage({ params }: {
                 <div className="mt-8" />
                 <BoardDetailTitle
                     type={"notice"}
-                    title={notices[0]?.title}
-                    category={notices[0]?.category || ''} />
+                    title={notices?.title}
+                    category={notices?.category || ''} />
 
                 <div className="bg-zinc-300 w-full h-[0.5px] my-3" />
                 <BoardDetailProfile
-                    writer={notices[0]?.writerName}
-                    createdAt={notices[0]?.createdAt}
-                    updatedAt={notices[0]?.updatedAt} />
+                    writer={notices?.writerName}
+                    createdAt={notices?.createdAt}
+                    updatedAt={notices?.updatedAt} />
 
                 <div className="bg-zinc-300 w-full h-[0.5px] mt-3" />
-                <BoardDetailContent content={notices[0]?.content} />
+                <BoardDetailContent content={notices?.content} />
                 <BoardDetailControl id={Number(params.id)} type={"notice"} totalElements={totalElements} />
             </div>
         </div>

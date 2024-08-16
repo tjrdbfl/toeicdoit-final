@@ -46,7 +46,7 @@ const UserChatRoom = ({ chat }: { chat: ChatRoomData[] }) => {
                         :
 
                         chat.map((item) => {
-                            return (<>
+                            return (
                                 <Link
                                     href={`?chat=true&roomId=${item.id}`}
                                     key={item.id}
@@ -68,7 +68,7 @@ const UserChatRoom = ({ chat }: { chat: ChatRoomData[] }) => {
                                     />
                                 </Link>
 
-                            </>);
+                            );
                         })
 
                     }

@@ -7,6 +7,8 @@ import { getUserIdInCookie } from "@/service/utils/token";
 import { ERROR } from "@/constants/enums/ERROR";
 import { useRouter } from "next/navigation";
 import { enterRoom } from "@/service/chat/actions";
+import { useCountMemberStore } from "@/store/chat/store";
+import { useEffect, useState } from "react";
 
 
 const ChatCard = ({ chat }: {
@@ -14,7 +16,12 @@ const ChatCard = ({ chat }: {
 }
 ) => {
     const router = useRouter();
-
+    const {numberOfMember}=useCountMemberStore();
+    const memberCountList=numberOfMember.filter((mem)=>mem.roomId===chat.id).map((mem)=>mem.count);
+    const [count,setCount]=useState(0);
+    
+    console.log(numberOfMember.filter((mem)=>mem.roomId===chat.id).map((mem)=>mem.count));
+    
     const handleUserId = async () => {
         const response = await getUserIdInCookie();
 
@@ -42,6 +49,14 @@ const ChatCard = ({ chat }: {
         }
     }
 
+    useEffect(() => {
+        // 실시간으로 인원수 업데이트
+        const memberCountList = numberOfMember.find((mem) => mem.roomId === chat.id);
+        if (memberCountList) {
+            setCount(memberCountList.count);
+        }
+    }, [numberOfMember, chat.id]);
+    
     return (<>
         <button
             onClick={handleUserId}
@@ -69,7 +84,7 @@ const ChatCard = ({ chat }: {
                             />
                         </div>
                         <h6 className="text-zinc-500">
-                            {chat.memberIds.length}명
+                            {count}명
                         </h6>
                     </div>
 

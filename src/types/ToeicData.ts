@@ -125,3 +125,12 @@ export type ResultChartData = {
     barData:number[],
     take:boolean
 }
+
+export type LineResultData={
+    recentResults:{
+        exam:number[],
+        level:number[],
+        part:number[],
+        test:number[]
+    }
+}

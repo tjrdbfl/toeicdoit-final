@@ -188,8 +188,7 @@ export async function saveRoom(category: string[], prevState: MessageState, form
             const result: MessageData = await response.json();
     
             if (result.state) {
-                revalidateTag('chat');
-               
+                revalidatePath('/?chat=true');
                 return { message: 'SUCCESS' };
             } else {
                 return { message: ERROR.SERVER_ERROR };

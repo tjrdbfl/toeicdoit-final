@@ -64,8 +64,8 @@ const LineChart = ({label,data}:{label:string[],data:number[][]}) => {
                 {
                     label: "실전 모의고사",
                     data: data[0],
-                    backgroundColor: "#fef9c3",
-                    borderColor: "#fef9c3",
+                    backgroundColor: "#fef08a",
+                    borderColor: "#fef08a",
                 },
                 {
                     label: "수준별 연습문제",

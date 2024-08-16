@@ -11,12 +11,12 @@ import { useExamTimerStore } from "@/store/toeic/timer";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef, useCallback } from "react";
 
-const ExamAnswer = ({ toeicId,name }: { toeicId: number,name:string }) => {
+const ExamAnswer = ({ toeicId, name }: { toeicId: number, name: string }) => {
     const [selectedTab, setSelectedTab] = useState(allParts[0].label);
     const option1: string[] = ['a', 'b', 'c', 'd'];
     const option2: string[] = ['a', 'b', 'c'];
     const { answers, setAnswer } = useExamAnswerStore();
-    const {takes}=useTakeStore();
+    const { takes } = useTakeStore();
 
     let initialAnswers: boolean[] = [];
     for (let i = 1; i <= 200; i++) {
@@ -28,7 +28,8 @@ const ExamAnswer = ({ toeicId,name }: { toeicId: number,name:string }) => {
     const partRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
     const router = useRouter();
     const { timeElapsed } = useExamTimerStore();
-    const {setTake}=useTakeStore();
+    const { setTake } = useTakeStore();
+    const { take } = useResultStore();
 
     useEffect(() => {
         const numbers: { [key: string]: number[] } = {};
@@ -64,17 +65,19 @@ const ExamAnswer = ({ toeicId,name }: { toeicId: number,name:string }) => {
 
         if (response.message === 'SUCCESS' && response.data !== undefined) {
             useResultStore.setState(
-                {name:name,
-                type:'exam',
-                BarData:response.data.barData,
-                score:response.data.score,
-                lc_score:response.data.lcScore,
-                rc_score:response.data.rcScore,
-                timeElapsed:response.data.timeElapsed,
-                toeicId:toeicId,
-            });
-            
-            setTake(toeicId,true);
+                {
+                    name: name,
+                    type: 'exam',
+                    BarData: response.data.barData,
+                    score: response.data.score,
+                    lc_score: response.data.lcScore,
+                    rc_score: response.data.rcScore,
+                    timeElapsed: response.data.timeElapsed,
+                    toeicId: toeicId,
+                    take: true
+                });
+
+            setTake(toeicId, true);
 
             console.log('userResultStore : ', name);
             if (name !== '') {
@@ -168,9 +171,22 @@ const ExamAnswer = ({ toeicId,name }: { toeicId: number,name:string }) => {
                     </ScrollArea>
                 </ul>
                 <div className="mx-10 mt-5">
-                    {takes[toeicId].take ? <button type="button"
+                    {take ? <button type="button"
                         className="form_submit_btn"
-                        onClick={() => { router.push(`${PG.EXAM}`); }}
+                        onClick={() => {
+                            useResultStore.setState({
+                                type: '',
+                                BarData: [],
+                                score: 0,
+                                lc_score: 0,
+                                rc_score: 0,
+                                timeElapsed: 0,
+                                toeicId: 0,
+                                name: '',
+                                take: false,
+                            });
+                            router.push(`${PG.EXAM}`);
+                        }}
                     >
                         제출하기
                     </button> : <SubmitButton label={"제출하기"} />}

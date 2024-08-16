@@ -12,6 +12,7 @@ type ResultStore = {
   timeElapsed: number,
   toeicId: number,
   name:string,
+  take:boolean,
 }
 export const useResultStore = create<ResultStore>()(
   persist(
@@ -24,6 +25,7 @@ export const useResultStore = create<ResultStore>()(
       timeElapsed: 0,
       toeicId: 0,
       name:'',
+      take:false,
       }),{
         name: 'ResultStore',
         storage: createJSONStorage(() => sessionStorage),

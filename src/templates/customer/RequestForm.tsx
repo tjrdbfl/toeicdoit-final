@@ -161,7 +161,7 @@ export default function RequestForm() {
               name="content"
               id="content"
               required
-              className="form_input"
+              className="form_input scroll-area"
               placeholder="※ 상담사에게 폭언, 욕설 등을 하지 말아주세요. 다변을 받지 못하거나 사전 아내 없이 삭제할 수 있습니다."
               style={{ height: 250 }}
               maxLength={1000}

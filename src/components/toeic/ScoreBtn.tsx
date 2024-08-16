@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 const ScoreBtn=({label,type,option,toeicId}:{label:string,type:string,option:number,toeicId:number})=>{
 
     const router=useRouter();
+    console.log('type: ',type);
     const url=type==='exam'?`${PG.EXAM}`:type==='level'?`${PG.LEVEL}`:type==='part'? `${PG.PART}`:`${PG.LEVEL_TEST}`;
 
     const {initialize}=useExamAnswerStore();

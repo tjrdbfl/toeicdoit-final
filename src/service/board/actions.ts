@@ -27,13 +27,12 @@ export async function saveBoard(prevState: FreeMessageState, formData: FormData)
     } else {
 
         const validatedFields = FreeSaveSchema.safeParse({
-            title: formData.get('title'),
-            content: formData.get('content'),
-            category: formData.get('category'),
-            type: formData.get('type')
+            title: formData.get('title')?.toString(),
+            content: formData.get('content')?.toString(),
+            category: formData.get('category')?.toString(),
+            type: formData.get('type')?.toString()
         })
 
-        console.log('validatedFields: ' + validatedFields.data?.type);
 
         if (!validatedFields.success) {
             console.log('saveBoard' + JSON.stringify(validatedFields.error.flatten().fieldErrors))
@@ -56,11 +55,12 @@ export async function saveBoard(prevState: FreeMessageState, formData: FormData)
                         title: validatedFields.data.title,
                         content: validatedFields.data.content,
                         type: validatedFields.data.type,
-                        userId: userId
+                        userId: Number(userId)
                     }),
                     cache: 'no-store'
                 });
 
+                console.log('saveBoard: '+response.status);
                 const result: MessageData = await response.json();
 
                 console.log(JSON.stringify(result));
@@ -77,6 +77,8 @@ export async function saveBoard(prevState: FreeMessageState, formData: FormData)
             }
 
         } catch (err) {
+            console.log('saveBoard error:'+err);
+                 
             return { ...prevState, result_message: ERROR.SERVER_ERROR };
         }
     }
@@ -102,10 +104,10 @@ export async function modifyBoard(prevState: FreeMessageState, formData: FormDat
         }
 
         const validatedFields = FreeSaveSchema.safeParse({
-            category: formData.get('category'),
-            title: formData.get('title'),
-            content: formData.get('content'),
-            type: formData.get('type')
+            category: formData.get('category')?.toString(),
+            title: formData.get('title')?.toString(),
+            content: formData.get('content')?.toString(),
+            type: formData.get('type')?.toString()
         })
 
         if (!validatedFields.success) {
@@ -130,11 +132,11 @@ export async function modifyBoard(prevState: FreeMessageState, formData: FormDat
                 cache: 'no-store'
             });
 
-            const result: MessageData = await response.json();
+            // const result: MessageData = await response.json();
 
-            console.log(JSON.stringify(result));
+            // console.log(JSON.stringify(result));
 
-            if (result.state) {
+            if (response.status===200) {
                 return { ...prevState, result_message: 'SUCCESS' };
             } else {
                 return { ...prevState, result_message: ERROR.SERVER_ERROR.toString() };
@@ -229,7 +231,7 @@ export async function saveReply(boardId: number, page: number, prevState: Messag
                     const result: MessageData = await response.json();
 
                     console.log('saveReply: ' + JSON.stringify(result));
-                    if (result) {
+                    if (result.state) {
                         revalidatePath(`${PG.FREE}/${page}`)
                         return { message: 'SUCCESS' };
                     } else {
@@ -278,7 +280,7 @@ export async function deleteReply(replyId: number, boardId: number) {
                     const result: MessageData = await response.json();
 
                     console.log('saveReply: ' + JSON.stringify(result));
-                    if (result.message === 'SUCCESS') {
+                    if (result.state) {
                         revalidatePath(`${PG.INQUIRY_DETAILS}/modify/reply/${boardId}`);
 
                         return { message: 'SUCCESS' };
@@ -331,7 +333,7 @@ export async function modifyReply(boardId: number, prevState: MessageState, form
                     const result: MessageData = await response.json();
 
                     console.log('saveReply: ' + JSON.stringify(result));
-                    if (result.message === 'SUCCESS') {
+                    if (result.state) {
                         revalidatePath(`${PG.INQUIRY_DETAILS}/modify/reply/${boardId}`);
                         return { message: 'SUCCESS' };
                     } else {

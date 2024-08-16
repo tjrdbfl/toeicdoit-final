@@ -10,6 +10,7 @@ import { PG } from "@/constants/enums/PG";
 import { I_ApiLevelTestResponse, ToeicDataPublic, ToeicProblemData } from "@/types/ToeicData";
 import Link from "next/link";
 import Image from "next/image";
+import { cookies } from "next/headers";
 
 export default async function LevelPracticePage({ params, searchParams }: {
     params: {
@@ -29,7 +30,8 @@ export default async function LevelPracticePage({ params, searchParams }: {
     }];
 
     const currentPage = Number(searchParams.page) || 0;
-
+    const name=cookies().get('name')?.value;
+    
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_TOEIC_API_URL}/api/${SERVER_API.TOEIC}/level/${params.id}`, {
             method: 'GET',
@@ -45,7 +47,7 @@ export default async function LevelPracticePage({ params, searchParams }: {
             console.error('Failed to get response data' + ERROR.SERVER_ERROR);
         }
     } catch (err) {
-        console.log('Failed to get notice: ', ERROR.SERVER_ERROR);
+        console.log('Failed to get level: ',err);
     }
 
 
@@ -53,7 +55,7 @@ export default async function LevelPracticePage({ params, searchParams }: {
         <div className="total_padding">
             <ToeicHeader label={`토익두잇 레벨 ${params.id} 연습문제 `} />
         </div>
-        <ToeicControl sound={'https://kr.object.ncloudstorage.com/toeicdoit/%EC%9D%8C%EC%9B%90%ED%8C%8C%EC%9D%BC/%EB%A0%88%EB%B2%A8%EB%B3%84%20%EC%9D%8C%EC%9B%90.mp3'} numberOfQuestions={toeic[0].toeicIds.length} type={"practice"} />
+        <ToeicControl sound={'https://kr.object.ncloudstorage.com/toeicdoit/%EC%9D%8C%EC%9B%90%ED%8C%8C%EC%9D%BC/%EB%A0%88%EB%B2%A8%EB%B3%84%20%EC%9D%8C%EC%9B%90.mp3'} numberOfQuestions={toeic[0].toeicIds.length} type={"practice"} toeicId={0} />
         <div className="flex flex-row items-start justify-center gap-x-16 mt-5">
             <div className="px:px-[10%] md:w-[350px] lg:px-[23%] lg:w-[800px] xl:px-[25%] xl:w-[900px] 2xl:px-[27%] 2xl:w-[900px] flex flex-col mt-5">
                 <div className="flex flex-row w-full gap-x-5 justify-between">
@@ -86,7 +88,8 @@ export default async function LevelPracticePage({ params, searchParams }: {
                 id={params.id}
                 part={params.id}
                 label={`Level ${params.id}`}
-                count={toeic[0].toeicIds.length} />
+                count={toeic[0].toeicIds.length} 
+                name={name===undefined?'':name}/>
 
         </div>
     </>);

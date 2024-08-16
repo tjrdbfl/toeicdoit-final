@@ -52,13 +52,13 @@ const ChatContentContainer = async({
                         room={room}
                     />
                 <div className='flex flex-col justify-between'>
-                   <ChatCloseBtn/>
+                   <ChatCloseBtn roomId={room.id}/>
                    <ChatDrawer room={room}/>
                 </div>
 
 
             </div>
-            <ChatRoom roomId={roomId} token={accessToken} />
+            <ChatRoom room={room} roomId={roomId} token={accessToken} />
         </div> 
     </ChatModal>
 

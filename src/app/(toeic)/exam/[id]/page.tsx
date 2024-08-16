@@ -25,7 +25,7 @@ export default async function ExamIdPage({ params }: { params: { id: number } })
         const response = await fetch(`${process.env.NEXT_PUBLIC_TOEIC_API_URL}/api/toeic/exam`, {
             method: 'GET',
             headers: AuthorizeHeader(accessToken),
-            cache: 'no-store'
+            next: { revalidate: 60 * 60 * 60 }
         })
 
         if (response.status === 200) {
@@ -33,10 +33,11 @@ export default async function ExamIdPage({ params }: { params: { id: number } })
             toeic = data;
         }
         else {
-            //throw new Error(ERROR.SERVER_ERROR);
+            throw new Error(ERROR.SERVER_ERROR);
         }
     } catch (err) {
-        //throw new Error(ERROR.SERVER_ERROR);
+        console.log(err);
+        throw new Error(ERROR.SERVER_ERROR);
     }
 
 

@@ -54,6 +54,7 @@ export default function ScorePage() {
     120 - calculateTimeData(score),
   ];
 
+  console.log('type: ',type)
   const DoughnutOtherTime = calculateTime(calculateTimeData(score));
 
   return (

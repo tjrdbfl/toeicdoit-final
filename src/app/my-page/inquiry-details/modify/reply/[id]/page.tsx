@@ -11,6 +11,7 @@ import { AuthorizeHeader, CommonHeader } from "@/config/headers";
 import { SERVER, SERVER_API } from "@/constants/enums/API";
 import { ERROR } from "@/constants/enums/ERROR";
 import { BoardData, I_ApiBoardResponse } from "@/types/BoardData";
+import { MessageData } from "@/types/MessengerData";
 import ChatIcon from '@mui/icons-material/Chat';
 import { cookies } from "next/headers";
 
@@ -39,20 +40,20 @@ export default async function ModifyReplyPage({ params }: {
     }
 
     try {
-        
-        const response = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/${SERVER_API.BOARD}/find-by-id?id=${params.id}`, {
+       
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${SERVER.USER}/${SERVER_API.BOARD}/find-by-id?id=${params.id}`, {
             method: 'GET',
             headers: AuthorizeHeader(accessToken),
             cache:'no-cache'
         });
 
-        const data = await response.json();
+        const result:MessageData = await response.json();
+        const data=result.data as BoardData;
 
-        if (data.status===500) {
-            throw new Error(ERROR.SERVER_ERROR);
- 
+        if (data) {
+            notices = data;
         } else {
-            notices=data;
+            console.error('Failed to get response data: ' + ERROR.SERVER_ERROR);
         }
 
     } catch (err) {

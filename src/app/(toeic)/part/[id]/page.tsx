@@ -10,6 +10,7 @@ import { PG } from "@/constants/enums/PG";
 import { I_ApiLevelTestResponse, ToeicDataPublic, ToeicProblemData } from "@/types/ToeicData";
 import Link from "next/link";
 import Image from "next/image";
+import { cookies } from "next/headers";
 
 
 export default async function PartPracticePage({ params,searchParams }: {
@@ -30,7 +31,8 @@ export default async function PartPracticePage({ params,searchParams }: {
     }];
 
     const currentPage = Number(searchParams.page) || 0;
-    
+    const name=cookies().get('name')?.value;
+
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_TOEIC_API_URL}/api/${SERVER_API.TOEIC}/part/${params.id}`, {
             method: 'GET',
@@ -86,7 +88,8 @@ export default async function PartPracticePage({ params,searchParams }: {
                 id={params.id}
                 part={params.id}
                 label={`Part ${params.id}`}
-                count={toeic[0].toeicIds.length} />
+                count={toeic[0].toeicIds.length} 
+                name={name===undefined? '':name} />
 
         </div>
     </>);

@@ -130,30 +130,36 @@ const RegisterForm = () => {
 
         console.log('handleSubmit: ' + JSON.stringify(result));
 
-        if (result.message) {
-            setMessage((prevState) => ({
-                ...prevState,
-                message: {
-                    ...prevState.message,
-                    email: result.message.email || [],
-                    password: result.message.password || [],
-                    name: result.message.name || [],
-                    phone: result.message.phone || [],
-                },
-                result_message: result.result_message,
-            }));
+        if(error.length!==0){
+            alert('비밀번호 일치 여부를 확인해주세요.');
+        }else{
+            if (result.message) {
+                setMessage((prevState) => ({
+                    ...prevState,
+                    message: {
+                        ...prevState.message,
+                        email: result.message.email || [],
+                        password: result.message.password || [],
+                        name: result.message.name || [],
+                        phone: result.message.phone || [],
+                    },
+                    result_message: result.result_message,
+                }));
+            }
+    
+            if (!confirm) {
+                alert('이메일 중복을 확인해주세요.');
+            }
+            else if (result.result_message === 'SUCCESS') {
+                console.log('1234');
+                alert('회원가입을 성공하셨습니다.');
+                router.push(`${PG.LOGIN}`);
+            } else {
+                handleError(result.result_message);
+            }
         }
 
-        if (!confirm) {
-            alert('이메일 중복을 확인해주세요.');
-        }
-        else if (result.result_message === 'SUCCESS') {
-            console.log('1234');
-            alert('회원가입을 성공하셨습니다.');
-            router.push(`${PG.LOGIN}`);
-        } else {
-            handleError(result.result_message);
-        }
+        
     };
 
     const existsEmail = async (event: React.MouseEvent<HTMLButtonElement>) => {

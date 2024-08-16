@@ -207,7 +207,7 @@ export default function FreeModifyForm({ post }: { post: BoardData }) {
             name="content"
             id="content"
             required
-            className="form_input"
+            className="form_input scroll-area"
             placeholder={post.content}
             defaultValue={post.content}
             style={{ height: 300 }}

@@ -26,11 +26,11 @@ export default async function BoardModifyPage({ params }: {
 
     try {
         const accessToken = cookies().get('accessToken')?.value;
-
+      
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${SERVER.USER}/${SERVER_API.BOARD}/find-by-id?id=${params.id}`, {
             method: 'GET',
             headers: AuthorizeHeader(accessToken),
-            next: { revalidate: 60 * 60 }
+            cache:'no-store'
         })
 
        

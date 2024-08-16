@@ -21,9 +21,9 @@ import { getSubscribeInfo } from "../calendar/actions";
 export async function login(prevState: LoginMessageState, formData: FormData): Promise<LoginMessageState> {
 
     console.log('-------------login-----------');
-    const existAccessToken=cookies().get('accessToken')?.value;
+    const existAccessToken = cookies().get('accessToken')?.value;
 
-    if(existAccessToken!==undefined || existAccessToken!==undefined){
+    if (existAccessToken !== undefined || existAccessToken !== undefined) {
         return { ...prevState, result_message: ERROR.EXIST_MEMBER };
     }
 
@@ -155,7 +155,7 @@ export async function login(prevState: LoginMessageState, formData: FormData): P
                     cache: 'no-store'
                 });
 
-                console.log('userInfoResponse: '+userInfoResponse.status);
+                console.log('userInfoResponse: ' + userInfoResponse.status);
                 const userInfoResult: MessageData = await userInfoResponse.json();
 
                 console.log('findUserInfoById: ' + JSON.stringify(userInfoResult));
@@ -215,9 +215,9 @@ export async function login(prevState: LoginMessageState, formData: FormData): P
 
         } else if (response.status === 401) {
             return { ...prevState, result_message: ERROR.INVALID_MEMBER };
-        } else if(response.status===404){
+        } else if (response.status === 404) {
             return { ...prevState, result_message: ERROR.INVALID_PASSWORD };
-        }else {
+        } else {
 
             return { ...prevState, result_message: ERROR.SERVER_ERROR };
         }
@@ -281,7 +281,7 @@ export async function logout() {
 
     try {
         const accessToken = cookies().get('accessToken')?.value;
-        
+
         if (accessToken !== undefined) {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${SERVER.AUTH}/logout`, {
                 method: 'POST',
@@ -408,7 +408,7 @@ export async function deleteByUserId() {
                     cache: 'no-store'
                 });
 
-                console.log('response: '+response.status);
+                console.log('response: ' + response.status);
 
                 const result: MessageData = await response.json();
                 console.log('deleteByUserId: ' + JSON.stringify(result));
@@ -569,15 +569,17 @@ export async function modifyUserInfo(prevState: UserInfoMessage, formData: FormD
             console.log('modifyUserInfo: ' + JSON.stringify(result));
 
             if (result.state) {
-                
-                const cookieRefreshString = cookies().get('refreshToken')?.value;
 
-                if (cookieRefreshString !== undefined) {
+                const cookieRefreshString = cookies().get('refreshToken')?.value;
+                const name = formData.get('name')?.toString();
+
+                console.log('modifyUserInfo: ' + name);
+                if (cookieRefreshString !== undefined && name !== undefined) {
                     cookies().delete('name');
 
                     cookies().set({
                         name: 'name',
-                        value: formData.get('name')?.toString() || '',
+                        value: name,
                         maxAge: 3600, // 1 hour
                         expires: new Date(Date.now() + 3600 * 1000), // 1 hour from now
                         sameSite: 'lax',
@@ -697,15 +699,17 @@ export async function findByNameProfile(userList: number[]) {
 
             console.log('findByNameProfile: ' + response.status);
 
-            const result:MessageData = await response.json();
+            const result: MessageData = await response.json();
 
             if (result.state) {
-            
-                return { message: 'SUCCESS', data: result.data as {
-                    userId:number,
-                    name:string,
-                    profile:string,
-                }[] };
+
+                return {
+                    message: 'SUCCESS', data: result.data as {
+                        userId: number,
+                        name: string,
+                        profile: string,
+                    }[]
+                };
             } else {
                 return { message: ERROR.SERVER_ERROR };
             }

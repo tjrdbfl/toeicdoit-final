@@ -43,7 +43,7 @@ export default async function FreeDetailPage({ params }: {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${SERVER.USER}/public/${SERVER_API.BOARD}/findBy?type=free&page=${params.id}&size=1`, {
             method: 'GET',
             headers: CommonHeader,
-            next: { revalidate: 60 * 60 }
+            cache:'no-store'
         });
 
         const data: I_ApiBoardResponse = await response.json();
@@ -54,7 +54,7 @@ export default async function FreeDetailPage({ params }: {
             totalElements = data.totalElements;
             
             console.log('totalElements: '+totalElements);
-
+            
         } else {
             console.error('Failed to get response data by find-by-types' + ERROR.SERVER_ERROR);
         }
@@ -67,7 +67,7 @@ export default async function FreeDetailPage({ params }: {
 
     return (<>
         <div className="px-20 lg:px-40 py-20">
-            <div className="px-80 mb-5">
+            <div className="xl:px-80 mb-5">
             <FreeLink label={""} />
             </div>
             <div className="w-full flex flex-col z-10 px-10 lg:px-20 2xl:px-[25%]">

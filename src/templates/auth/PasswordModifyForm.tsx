@@ -31,7 +31,6 @@ const initialState: ModifyPasswordMessageState = {
 const PasswordModifyForm = () => {
 
     const { pending } = useFormStatus();
-    const [state,formAction]=useFormState(modifyByPassword,initialState);
     const [message,setMessage]=useState<ModifyPasswordMessageState>(initialState);
     
     const [confirm,setConfirm]=useState<boolean>(false);

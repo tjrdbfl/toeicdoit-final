@@ -1,5 +1,5 @@
 'use client'
-import { ChatData } from "@/types/ChatData";
+import { ChatData, ChatRoomData } from "@/types/ChatData";
 import ChatMessage from "@/components/chat/ChatMessage";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -7,7 +7,7 @@ import { useInView } from "react-intersection-observer";
 import { findChatByRoomId } from "@/service/chat/actions";
 import ChatMessageContainer from "./ChatMessageContainer";
 import { SERVER, SERVER_API } from "@/constants/enums/API";
-import { useChatAlertStore, useChatNewMessageStore } from "@/store/chat/store";
+import { useChatAlertStore, useChatNewMessageStore, useCountMemberStore } from "@/store/chat/store";
 import { ERROR } from "@/constants/enums/ERROR";
 import NewMessage from "@/components/chat/NewMessage";
 import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
@@ -18,10 +18,11 @@ import { AuthorizeHeader } from "@/config/headers";
 
 
 const ChatRoom = ({
-    roomId, token
+    roomId, token, room
 }: {
     roomId: string,
-    token: string | undefined
+    token: string | undefined,
+    room:ChatRoomData
 }) => {
 
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -32,7 +33,7 @@ const ChatRoom = ({
         rootMargin: "0px 0px 0px 0px",
     });
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
-    
+    const {numberOfMember,setNumberOfMember}=useCountMemberStore();    
 
     function isScrollAtBottom(scrollRef: React.RefObject<HTMLElement>): boolean {
         if (!scrollRef.current) return false;
@@ -118,6 +119,8 @@ const ChatRoom = ({
             try {
                 const newMessage: ChatData = JSON.parse(event.data);
                 if(newMessage.id === "0") {
+                    setNumberOfMember(roomId,Number(newMessage.message));
+                    console.log('numberOfMember: ',JSON.stringify(numberOfMember.filter((mem)=>mem.roomId===roomId).map((item)=>item.count)));  
                     console.log('인원 수: ',newMessage.message);
                     return;
                 };
@@ -205,6 +208,7 @@ const ChatRoom = ({
                                         key={index}
                                     >
                                         <ChatMessage
+                                            room={room}
                                             key={item.id}
                                             token={token}
                                             chat={item} />
@@ -216,6 +220,7 @@ const ChatRoom = ({
                 })}
                 {messages.map((msg) => (
                     <ChatMessage
+                    room={room}
                         token={token}
                         key={msg.id}
                         chat={msg} />

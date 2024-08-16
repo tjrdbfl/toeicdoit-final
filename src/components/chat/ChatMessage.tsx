@@ -1,5 +1,5 @@
 'use client';
-import { ChatData } from "@/types/ChatData";
+import { ChatData, ChatRoomData } from "@/types/ChatData";
 import Image from "next/image";
 import StarPurple500Icon from '@mui/icons-material/StarPurple500';
 import { SetStateAction, useEffect, useState } from "react";
@@ -11,9 +11,10 @@ import { extractCookie } from "@/service/utils/extract";
 import { getUserIdInCookie } from "@/service/utils/token";
 import { useUserInfoStore } from "@/store/auth/store";
 
-const ChatMessage = ({ chat,token }: {
+const ChatMessage = ({ chat,token,room }: {
      chat: ChatData,
      token: string|undefined,
+     room:ChatRoomData
 }) => {
 
     const {userId}=useUserInfoStore();
@@ -56,8 +57,15 @@ const ChatMessage = ({ chat,token }: {
                                 className="w-[25px] h-[25px]"
                             />
                         <div className="flex flex-col gap-y-2">
-                            <div className="flex flex-row">
-                                {chat.senderId === 'admin' && <StarPurple500Icon className="text-pink-500" />}
+                            <div className="flex flex-row items-center gap-x-2">
+                                {(room.adminIds!==undefined && chat.senderId === room.adminIds[0]) && 
+                                <Image loading="lazy"
+                                      src={"/svgs/icons/star-icon.svg"}
+                                      alt={"chat-main"}
+                                      className="h-[14px] w-[14px] rounded-full bg-pink-500"
+                                      width={20}
+                                      height={20}
+                                    />}
                                 <p className="text-black text-[15px] font-medium">{chat.senderName}</p>
                             </div>
                             <div className="bg-white text-[15px] text-black p-2 rounded-lg max-w-[270px] text-pretty">{chat.message}</div>
