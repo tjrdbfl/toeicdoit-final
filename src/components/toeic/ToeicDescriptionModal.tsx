@@ -30,10 +30,10 @@ const ToeicDescriptionModal = ({ id, setOpen,toeic }: {
             width={300}
             height={200}/>}
             <div className="flex flex-col gap-y-2 mt-2">
-            <p>{toeic.optionId.choice1}</p>
-            <p>{toeic.optionId.choice2}</p>
-            <p>{toeic.optionId.choice3}</p>
-            <p>{toeic.optionId.choice4}</p>
+            <p>{toeic.option.choice1}</p>
+            <p>{toeic.option.choice2}</p>
+            <p>{toeic.option.choice3}</p>
+            <p>{toeic.option.choice4}</p>
             </div>
             
             <div className="border-slate-300 border-2 rounded-xl mt-5 p-5">

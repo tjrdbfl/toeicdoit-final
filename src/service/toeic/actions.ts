@@ -1,7 +1,7 @@
 'use server';
 
 import { AuthorizeHeader, CommonHeader } from "@/config/headers";
-import { ITEMS_PER_PAGE, ResultChartData, resultChartData, ToeicDataPublic } from "@/types/ToeicData";
+import { ITEMS_PER_PAGE, ResultChartData, ToeicProblemType } from "@/types/ToeicData";
 import { redirect } from "next/navigation";
 import { checkTokenExist } from "../utils/token";
 import { ERROR } from "@/constants/enums/ERROR";
@@ -17,7 +17,7 @@ export async function fetchQuestions({
     console.log('page: ', pageParam);
     console.log('level: ', level);
 
-    let questions: ToeicDataPublic[] = [];
+    let questions: ToeicProblemType[] = [];
 
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/toeic?level=${level}&page=${pageParam}`, {
