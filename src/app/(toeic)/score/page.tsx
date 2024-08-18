@@ -101,11 +101,11 @@ export default function ScorePage() {
           </div>
 
           <div className="mt-10" />
-          <BarContainer
+          {type==='exam' && <BarContainer
             UserBarData={UserBarData}
             PartBarData={PartBarData}
             score={score}
-          />
+          />}
 
           <div className="mt-10" />
 

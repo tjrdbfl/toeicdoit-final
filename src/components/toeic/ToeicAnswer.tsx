@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 
 const ToeicAnswer = ({op,page}:{op:OptionData,page:number}) => {  
     const [selected, setSelected] = useState<string>('');
-
+    const {answers,setAnswer}=useToeicAnswerStore();
+    
     const select = op.choice4===''? ['A', 'B', 'C']: ['A', 'B', 'C', 'D'];
 
     useEffect(()=>{
@@ -14,7 +15,7 @@ const ToeicAnswer = ({op,page}:{op:OptionData,page:number}) => {
         console.log('select: '+select[1]);
     },[selected]);
 
-    const {answers,setAnswer}=useToeicAnswerStore();
+   
 
     useEffect(()=>{
         console.log('answers: '+JSON.stringify(answers));

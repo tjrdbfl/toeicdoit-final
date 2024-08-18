@@ -179,6 +179,8 @@ export async function handlePayment(imp_uid: string, paid_amount: number, produc
 export async function paymentRefund(paymentResult: PaymentModel) {
     console.log('handlePayment');
 
+    console.log('paymentResult: ',paymentResult.subscribeId);
+    
     const checkResposnse = await checkTokenExist();
 
     console.log('checkResposnse: ' + checkResposnse?.message);
@@ -198,8 +200,8 @@ export async function paymentRefund(paymentResult: PaymentModel) {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${SERVER.TX}/${SERVER_API.PAYMENT}/refund`, {
                     method: 'POST',
                     headers: AuthorizeHeader(accessToken),
-                    body: JSON.stringify(paymentResult)
-                    , cache: 'no-store'
+                    body: JSON.stringify(paymentResult), 
+                    cache: 'no-store'
                 });
 
                 const result: MessageData = await response.json();

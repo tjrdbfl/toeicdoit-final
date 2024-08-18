@@ -63,6 +63,8 @@ export default async function UserInfoPage() {
         console.log('getSubscribeInfo: '+JSON.stringify(response));
         if (response?.message==='SUCCESS') {
             subscribe=response.data===undefined? false:response.data;
+
+            console.log('subscribe: ',subscribe);
             revalidatePath(`${PG.USER_INFO}`);
      
         } else {
@@ -78,6 +80,7 @@ export default async function UserInfoPage() {
 
         if (response?.status === 200) {
             paymentInfo = response.data as PaymentModel[];
+
         } else {
             console.log(ERROR.SERVER_ERROR);
         }

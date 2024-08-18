@@ -67,7 +67,7 @@ const PracticeAnswer = ({
                     lc_score: response.data.lcScore,
                     rc_score: response.data.rcScore,
                     timeElapsed: response.data.timeElapsed,
-                    toeicId: 0,
+                    toeicId:id,
                     take: true
                 });
 
@@ -97,7 +97,7 @@ const PracticeAnswer = ({
                                 className="flex flex-row gap-x-2 border-slate-200 items-center border-2 mr-4 w-[150px]"
                             >
                                 <Link
-                                    href={`/${type==='part'?'part':'level'}/${id}?page=${questionNumber-1}`}
+                                    href={`/${type==='part'?'part':'level'}/${id}?page=${questionNumber}`}
                                     key={`question-${questionNumber}`}
                                     className={`text-black hover:text-zinc-500 hover:underline font-semibold w-[40px] border-slate-100 border-r-2 py-1 px-2 bg-blue-50`}
                                 >

@@ -1,61 +1,41 @@
 import { MessageData } from "./MessengerData";
 
-export type ToeicData = {
-    id: number;
-    part: number;
-    level: number;
-    quesiton: string;
-    answer: string;
-    numberOfQuestions: number;
-    description: string;
-    image: string;
-    sound: string;
-    script: string;
-    createdAt: Date;
-    updatedAt: Date;
-    title: string;
-    take: boolean;
-    option: OptionData;
-    result: ResultData;
-}
+
 export type OptionData = {
     id: number;
     choice1: string;
     choice2: string;
     choice3: string;
     choice4: string;
+    toeicId: number;
+    createdAt:string;
+    updatedAt:string;
 }
-export type ResultData = {
-    id: number;
-    result: boolean;
-    userAnswer: AnswerData[];
-    isCorrect: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-}
-export type AnswerData = {
-    id: number;
-    answer: string;
-}
+
 export type ToeicProblemType = {
     id: number,
-    question: string,
-    description: string,
-    image: string,
-    take: boolean,
-    optionId: OptionData,
-    answer: string,
-    part: string,
     level: number,
+    part: string,
+    question: string,
+    answer: string,
+    image: string,
+    description: string,
+    take: boolean,
+    toeicCategory:ToeicCategoryType,
+    option: OptionData,
 }
-export type ToeicProblemData = [{
-    id: number,
-    sound: string,
-    title: string,
-    toeicIds: ToeicProblemType[],
-    numberOfQuestions: number,
-    testType: string,
-}];
+
+export type ToeicCategoryType={
+    id:number,
+    title:string,
+    sound:string,
+    testType:string,
+    take:boolean,
+    createdAt:string,
+    updatedAt:string,
+    toeicQuestions:null   
+}
+
 
 export type resultChartData = {
     BarData: number[],
@@ -64,26 +44,7 @@ export type resultChartData = {
     rc_score: number,
     timeElapsed: number,
 }
-export type ToeicDataPublic = {
-    id: ToeicData['id'],
-    question: ToeicData['quesiton'];
-    part: ToeicData['part'];
-    image: ToeicData['image'];
-    sound: ToeicData['sound'];
-    numberOfQuestions: ToeicData['numberOfQuestions'];
-    option: ToeicData['option'];
-    take: ToeicData['take'];
-    answer: ToeicData['answer'];
-    description: ToeicData['description'];
-    script: ToeicData['script'];
-}
-export type OptionDataPublic = {
-    id: OptionData['id'];
-    choice1: OptionData['choice1'];
-    choice2: OptionData['choice2'];
-    choice3: OptionData['choice3'];
-    choice4: OptionData['choice4'];
-}
+
 
 export type ChartData = {
     BarData: number[];     //파트별 점수 합산 
@@ -99,12 +60,6 @@ export const CURRENT_TOTAL_PAGE = 10;
 export interface I_ApiLevelTestRequest {
     currentPage?: number;
     level: number;
-}
-export interface I_ApiLevelTestResponse {
-    totalPages?: number;
-    questions: ToeicDataPublic;
-    success: boolean;
-    message?: MessageData;
 }
 export type ResultChartData = {
     id: number,
@@ -134,3 +89,4 @@ export type LineResultData={
         test:number[]
     }
 }
+

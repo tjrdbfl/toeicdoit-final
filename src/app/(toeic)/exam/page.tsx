@@ -3,7 +3,7 @@ import ExamLoading from "@/components/exam/ExamLoading";
 import ExamTable from "@/components/exam/ExamTable";
 import CustomPagination from "@/components/common/CustomPagination";
 import { Suspense } from "react";
-import { CommonHeader } from "@/config/headers";
+import { AuthorizeHeader, CommonHeader } from "@/config/headers";
 import LinkIcon from "@/components/common/LinkIcon";
 import Navbar from "@/app/Navbar";
 import Footer from "@/app/Footer";
@@ -11,6 +11,7 @@ import MainHeader from "@/components/common/MainHeader";
 import { MessageData } from "@/types/MessengerData";
 import { findUserInfoById } from "@/service/auth/actions";
 import { SERVER_API } from "@/constants/enums/API";
+import { cookies } from "next/headers";
 
 export default async function ExamPage({ searchParams }: {
     searchParams?: {
@@ -23,10 +24,12 @@ export default async function ExamPage({ searchParams }: {
     let totalPages: number = 0;
 
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/${SERVER_API.TOEIC}/exam`, {
+        const accessToken=cookies().get('accessToken')?.value;
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${SERVER_API.TOEIC}/${SERVER_API.TOEIC}/exam`, {
             method: 'POST',
-            headers: CommonHeader,
+            headers: AuthorizeHeader(accessToken),
             body: JSON.stringify({query: query}),
+            cache:'no-store'
         });
 
         if (!response) {

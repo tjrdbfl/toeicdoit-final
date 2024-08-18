@@ -37,13 +37,13 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login',request.url));
   }
 
-  //5. 사용자 결제 여부에 따른 유료 상품 접근 권한 제어
-  if(payment==='false'
-    && (pathname.match(/^\/exam\/\d+/)
-    || pathname.match(/^\/level\/\d+/)
-    || pathname.match(/^\/part\/\d+/))){
-      return NextResponse.redirect(new URL(`${PG.PAYMENT}`, request.url));
-  }
+  // //5. 사용자 결제 여부에 따른 유료 상품 접근 권한 제어
+  // if(payment==='false'
+  //   && (pathname.match(/^\/exam\/\d+/)
+  //   || pathname.match(/^\/level\/\d+/)
+  //   || pathname.match(/^\/part\/\d+/))){
+  //     return NextResponse.redirect(new URL(`${PG.PAYMENT}`, request.url));
+  // }
 
   return NextResponse.next();
 }

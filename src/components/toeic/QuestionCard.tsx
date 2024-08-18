@@ -2,6 +2,7 @@ import { ToeicProblemType } from "@/types/ToeicData";
 import Image from "next/image";
 import { FC } from "react";
 import ToeicModalBtn from "./ToeicModalBtn";
+import { splitStringToList } from "@/service/utils/utils";
 
 
 interface QuestionCardProps {
@@ -12,20 +13,26 @@ const QuestionCard: FC<QuestionCardProps> = ({
     id, toeic
 }) => {
 
+    const questions:string[]=splitStringToList(toeic.question);
     return (<>
         <div
             key={id}
             className="flex flex-col justify-center">
-            <div className="flex flex-row gap-x-2 w-[500px] xl:w-[630px]">
+            <div className="flex flex-row gap-x-2 w-[450px] xl:w-[630px]">
                 <h1
                     key="level practice number"
                     className="text-black text-lg text-nowrap font-medium "
-                >{id+1} . </h1>
-                {toeic?.question !== '' && <h2
+                >{id} . </h1>
+                <div className="flex flex-col">
+                {toeic?.question !== '' && questions.map((str)=>(
+                    <h2
                     key="level practice question"
                     className="text-black text-lg items-start font-medium ">
-                    {toeic?.question}
-                </h2>}
+                    {str}
+                </h2>
+                ))}
+                </div>
+               
             </div>
             <div
                 key="level practice image"
@@ -35,7 +42,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
                         <Image 
                             src={toeic?.image}
                             alt={"level practice image"}
-                            width={500}
+                            width={450}
                             height={400}
                             priority={true}
                             className={`${toeic?.part==="1" ? "w-[400px] h-[250px]":""}`}
@@ -48,7 +55,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
                 <div className="flex items-start mb-4">
                     <div
                         className={`ms-2 text-[18px] font-medium flex flex-row justify-start limited-width-text ${toeic?.take && toeic?.answer === 'a' ? 'text-red-500' : 'text-gray-900 '}`}>
-                        {toeic?.optionId.choice1}
+                        {toeic.option.choice1}
                     </div>
                 </div>
 
@@ -56,21 +63,21 @@ const QuestionCard: FC<QuestionCardProps> = ({
 
                     <div
                         className={`ms-2 text-[18px] font-medium flex flex-row justify-start limited-width-text ${toeic?.take && toeic?.answer === 'b' ? 'text-red-500' : 'text-gray-900 '}`}>
-                        {toeic?.optionId.choice2}
+                        {toeic.option.choice2}
                     </div>
                 </div>
 
                 <div className="flex items-start mb-4">
                     <div
                         className={`ms-2 text-[18px] font-medium flex flex-row justify-start limited-width-text ${toeic?.take && toeic?.answer === 'c' ? 'text-red-500' : 'text-gray-900 '}`}>
-                        {toeic?.optionId.choice3}
+                        {toeic.option.choice3}
                     </div>
                 </div>
 
-                {toeic?.optionId.choice4 !== '' && <div className="flex items-start mb-4">
+                {toeic.option.choice4 !== '' && <div className="flex items-start mb-4">
                     <div
                         className={`ms-2 text-[18px] font-medium flex flex-row justify-start limited-width-text ${toeic?.take && toeic?.answer === 'd' ? 'text-red-500' : 'text-gray-900 '}`}>
-                        {toeic?.optionId.choice4}
+                        {toeic?.option.choice4}
                     </div>
                 </div>}
             </div>

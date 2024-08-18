@@ -1,7 +1,5 @@
 import {
-  OptionData,
-  OptionDataPublic,
-  ToeicDataPublic,
+
   ToeicProblemType,
 } from "@/types/ToeicData";
 import Image from "next/image";
@@ -59,7 +57,7 @@ const ExamCard: FC<ExamCardProps> = ({toeic,toeicId}) => {
               }`}
             >
               <p className="text-nowrap mr-2">(a)</p>
-              {toeic.optionId.choice1}
+              {toeic.option.choice1}
             </div>
           </div>
 
@@ -70,7 +68,7 @@ const ExamCard: FC<ExamCardProps> = ({toeic,toeicId}) => {
               }`}
             >
               <p className="text-nowrap mr-2">(b)</p>
-              {toeic.optionId.choice2}
+              {toeic.option.choice2}
             </div>
           </div>
 
@@ -81,11 +79,11 @@ const ExamCard: FC<ExamCardProps> = ({toeic,toeicId}) => {
               }`}
             >
               <p className="text-nowrap mr-2">(c)</p>
-              {toeic.optionId.choice3}
+              {toeic.option.choice3}
             </div>
           </div>
 
-          {toeic.optionId.choice4 !== "" && (
+          {toeic.option.choice4 !== "" && (
             <div className="flex items-start">
               <div
                 className={`text-[15px] font-medium flex flex-row justify-start limited-width-text ${
@@ -93,7 +91,7 @@ const ExamCard: FC<ExamCardProps> = ({toeic,toeicId}) => {
                 }`}
               >
                 <p className="text-nowrap mr-2">(d)</p>
-                {toeic.optionId.choice4}
+                {toeic.option.choice4}
               </div>
             </div>
           )}

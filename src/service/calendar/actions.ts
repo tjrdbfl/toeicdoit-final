@@ -186,6 +186,8 @@ export async function getSubscribeInfo(){
 
                 if(response.status===200){
                     const result:MessageData=await response.json();
+
+                    console.log('subscribe result: ',result.state);
                     return {message:'SUCCESS',data:result.state};               
                 }else{
                     return {message:ERROR.SERVER_ERROR};      

@@ -1,6 +1,6 @@
 'use client';
 import { RealTestContent } from "@/constants/my-page/datagrid";
-import { ITEMS_PER_PAGE, ToeicData } from "@/types/ToeicData";
+import { ITEMS_PER_PAGE } from "@/types/ToeicData";
 import TakeBtn from "../button/TakeBtn";
 import CompleteBtn from "../button/CompleteBtn";
 import ExamBody from "./ExamBody";
@@ -90,7 +90,9 @@ export default async function ExamTable({ query, currentPage }: {
                         </thead>
                         <tbody className="bg-white rounded-2xl">
 
-                            {tests?.map((content, index) => (
+                            {tests?.map((content, index) => {
+                                console.log('content id: ',content.id);
+                                return(
                                 <ExamBody
                                     key={content.id}
                                     id={content.id}
@@ -103,13 +105,14 @@ export default async function ExamTable({ query, currentPage }: {
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-1.5 text-[14px]">
                                         {takes[content.id-1].take ?
-                                            <CompleteBtn id={10*(currentPage-1)+1} />
+                                            <CompleteBtn id={content.id}/>
                                             :
-                                            <TakeBtn id={10*(currentPage-1)+1} />
+                                            <TakeBtn id={content.id} />
                                             }
                                     </td>
                                 </ExamBody>
-                            ))}
+                            )}
+                            )}
                         </tbody>
                     </table>
                 </div>
