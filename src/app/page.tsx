@@ -39,11 +39,11 @@ export default async function Home({ searchParams }: {
             <WhatsNew />
           </div>
 
-          <div className="mt-20 px-32" >
+          <div className="mt-20 mb-28 px-32" >
             <World />
           </div>
 
-          <div className="relative">
+          <div className="relative ">
             <div className="mt-10 xl:px-32" >
               <GetStarted />
             </div>
