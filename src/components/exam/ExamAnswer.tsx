@@ -73,6 +73,8 @@ const ExamAnswer = ({ toeicId, name }: { toeicId: number, name: string }) => {
                     lc_score: response.data.lcScore,
                     rc_score: response.data.rcScore,
                     timeElapsed: response.data.timeElapsed,
+                    lcAllScore:response.data.lcAllScore,
+                    rcAllScore:response.data.rcAllScore,
                     toeicId: toeicId,
                     take: true
                 });
@@ -184,6 +186,8 @@ const ExamAnswer = ({ toeicId, name }: { toeicId: number, name: string }) => {
                                 toeicId: 0,
                                 name: '',
                                 take: false,
+                                rcAllScore:0,
+                                lcAllScore:0
                             });
                             router.push(`${PG.EXAM}`);
                         }}

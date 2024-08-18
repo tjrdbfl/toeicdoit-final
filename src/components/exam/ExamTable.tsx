@@ -7,6 +7,11 @@ import ExamBody from "./ExamBody";
 import { CommonHeader } from "@/config/headers";
 import { getExamTitleId, getExamTitleYear, getTakeById } from "@/service/utils/utils";
 import { useTakeStore } from "@/store/toeic/store";
+import Link from "next/link";
+import { PG } from "@/constants/enums/PG";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import ExamCautionModal from "./ExamCautionModal";
 
 export default async function ExamTable({ query, currentPage }: {
     query: string,
@@ -15,7 +20,10 @@ export default async function ExamTable({ query, currentPage }: {
 
     const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
+    const router=useRouter();
     const {takes}=useTakeStore();
+ 
+
     let tests: { id: number, title: string, take: boolean |undefined }[] = [
         {
             id: 10*(currentPage-1)+1,
@@ -91,7 +99,7 @@ export default async function ExamTable({ query, currentPage }: {
                         <tbody className="bg-white rounded-2xl">
 
                             {tests?.map((content, index) => {
-                                console.log('content id: ',content.id);
+
                                 return(
                                 <ExamBody
                                     key={content.id}
@@ -104,11 +112,17 @@ export default async function ExamTable({ query, currentPage }: {
                                         {content.title}
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-1.5 text-[14px]">
-                                        {takes[content.id-1].take ?
+                                    <TakeBtn id={content.id} />
+                                        {/* {takes[content.id-1].take ?
                                             <CompleteBtn id={content.id}/>
                                             :
-                                            <TakeBtn id={content.id} />
-                                            }
+                                            <button
+                                            className="text-[var(--blue2)] underline text-[15px] hover:text-[#89CFF3]"
+                                            onClick={()=>{
+                                                router.push(`${PG.EXAM}/${content.id}`)
+                                                }}
+                                            >응시하기</button>
+                                            } */}
                                     </td>
                                 </ExamBody>
                             )}

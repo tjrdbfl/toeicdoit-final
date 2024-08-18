@@ -1,8 +1,10 @@
+'use client';
 import { ToeicProblemType } from "@/types/ToeicData";
 import Image from "next/image";
 import { FC } from "react";
 import ToeicModalBtn from "./ToeicModalBtn";
 import { splitStringToList } from "@/service/utils/utils";
+import { useResultStore } from "@/store/toeic/store";
 
 
 interface QuestionCardProps {
@@ -14,6 +16,9 @@ const QuestionCard: FC<QuestionCardProps> = ({
 }) => {
 
     const questions:string[]=splitStringToList(toeic.question);
+
+    const {take}=useResultStore();
+
     return (<>
         <div
             key={id}
@@ -82,13 +87,13 @@ const QuestionCard: FC<QuestionCardProps> = ({
                 </div>}
             </div>
 
-            {toeic?.take && <>
+            {take && <div className="w-[200px]">
                 <ToeicModalBtn
-                    id={toeic.id}
+                    id={id}
                     label={"해설 보기"}
                     toeic={toeic}
                 />
-            </>}
+            </div>}
         </div>
     </>);
 }

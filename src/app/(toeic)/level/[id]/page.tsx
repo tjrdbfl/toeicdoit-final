@@ -79,6 +79,7 @@ export default async function LevelPracticePage({ params, searchParams }: {
             </div>
             <div className="mt-20" />
             <PracticeAnswer
+            
                 type='level'
                 id={params.id}
                 part={params.id}

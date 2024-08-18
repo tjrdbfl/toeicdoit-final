@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 
 export default function ScorePage() {
 
-  const { type, name, score, lc_score, rc_score, BarData, timeElapsed, toeicId } = useResultStore();
+  const { type, name, score, lc_score, rc_score, BarData, timeElapsed, toeicId, lcAllScore, rcAllScore } = useResultStore();
   const [formattedTime, setFormattedTime] = useState<string|null>(null);
 
   const UserBarData = {

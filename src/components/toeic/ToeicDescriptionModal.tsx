@@ -12,12 +12,12 @@ const ToeicDescriptionModal = ({ id, setOpen,toeic }: {
     setOpen: Dispatch<SetStateAction<boolean>>,
     toeic:ToeicProblemType
 }) => {
-    console.log('ToeicDescriptionModal: '+toeic.description);
+  
     
     return (<>
         <div className="bg-white p-5">
             <div className="flex flex-row justify-between items-center">
-                <div className="text-lg font-semibold ml-2">{toeic.id}. {toeic.question}</div>
+                <div className="text-lg font-semibold ml-2">{id}. {toeic.question}</div>
                 <button
                     onClick={() => setOpen(false)}
                     className="hover:rounded-full hover:bg-slate-100 w-10 h-10">

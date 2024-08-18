@@ -10,25 +10,22 @@ const ModalCheckBox=({id}:{id:number})=>{
     const {toggle,toggleModal}=useExamCautionModalStore();
     const {show,setShow}=useExamRetakeModalStore();
 
-    const handleClick = async () => {
-        try {
-          await router.push(`/exam/${id}`);
-          if(show){
-            setShow();
-          }
-          if(toggle){
-            toggleModal();
-          }
-          
-        } catch (error) {
-          console.error(error);
-        }
+    const handleClick = () => {
+      console.log('Router navigation with id:', id); 
+      setChecked(!checked);
+      router.push(`/exam/${id}`);
+      if(show){
+        setShow();
+      }
+      if(toggle){
+        toggleModal();
+      }
+      
       };
 
     return(<>
      <Checkbox
                     checked={checked}
-                    onChange={()=>setChecked(!checked)}
                     onClick={handleClick}
                     inputProps={{ 'aria-label': 'controlled' }}
                     sx={{

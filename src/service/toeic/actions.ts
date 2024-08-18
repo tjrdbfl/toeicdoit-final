@@ -7,6 +7,7 @@ import { checkTokenExist } from "../utils/token";
 import { ERROR } from "@/constants/enums/ERROR";
 import { cookies } from "next/headers";
 import { MessageData } from "@/types/MessengerData";
+import { SERVER, SERVER_API } from "@/constants/enums/API";
 
 export async function fetchQuestions({ 
     pageParam = 1, level
@@ -131,7 +132,8 @@ export async function submitExamAnswer(toeicId:number,time:number,formData: Form
                 console.log('time: '+time);
                 console.log('toeicId: '+toeicId);
 
-                const response=await fetch(`${process.env.NEXT_PUBLIC_TOEIC_API_URL}/api/toeic/exam/save`,{
+                const response=await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${SERVER.TOEIC}/${SERVER_API.TOEIC}/exam/save`,{
+                //const response=await fetch(`http://localhost:8081/api/toeic/exam/save`,{
                     method:'POST',
                     headers:AuthorizeHeader(accessToken),
                     body:JSON.stringify({

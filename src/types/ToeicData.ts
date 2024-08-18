@@ -70,6 +70,8 @@ export type ResultChartData = {
     score:number,
     lcScore:number,
     rcScore: number,
+    rcAllScore:number,
+    lcAllScore:number,
     scorePart1: number,
     scorePart2: number,
     scorePart3: number,

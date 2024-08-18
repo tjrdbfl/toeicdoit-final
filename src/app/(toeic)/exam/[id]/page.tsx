@@ -16,7 +16,7 @@ export default async function ExamIdPage({ params }: { params: { id: number } })
     try {
         const accessToken=cookies().get('accessToken')?.value;
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_TOEIC_API_URL}/${SERVER.TOEIC}/${SERVER_API.TOEIC}/exam`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${SERVER.TOEIC}/${SERVER_API.TOEIC}/exam`, {
             method: 'GET',
             headers: AuthorizeHeader(accessToken),
             cache:'no-store'

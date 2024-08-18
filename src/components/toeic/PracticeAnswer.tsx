@@ -9,6 +9,7 @@ import { classifyPart } from "@/service/toeic/items";
 import { useExamAnswerStore, useNumberOfQuestionStore, useResultStore } from "@/store/toeic/store";
 import { usePracticeTimerStore } from "@/store/toeic/timer";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 const PracticeAnswer = ({
@@ -25,9 +26,10 @@ const PracticeAnswer = ({
     const option1: string[] = ['a', 'b', 'c', 'd'];
     const option2: string[] = ['a', 'b', 'c'];
     const [select, setSelect] = useState<{ [key: number]: boolean }>({});
-    const { answers, setAnswer } = useExamAnswerStore();
+    const { answers, setAnswer,initialize } = useExamAnswerStore();
     const { timeElapsed } = usePracticeTimerStore();
-    
+    const {take}=useResultStore();
+
     let initialAnswers: boolean[] = [];
     for (let i = 1; i <= count; i++) {
         initialAnswers[i] = false;
@@ -35,6 +37,7 @@ const PracticeAnswer = ({
     
     const [questionNumbers, setQuestionNumbers] = useState<{ [key: number]: boolean }>(initialAnswers);
     
+    const router=useRouter();
     const handleSelect = (questionId: number, value: string) => {
         setAnswer(questionId, value, classifyPart(questionId));
         setSelect((prevAnswers) => ({
@@ -79,6 +82,26 @@ const PracticeAnswer = ({
             alert(response.message);
         }
     };
+
+    const handleRefresh=()=>{
+        console.log('handleRefresh');
+        useResultStore.setState(
+            {
+                name: '',
+                type: '',
+                BarData: [],
+                score: 0,
+                lc_score: 0,
+                rc_score: 0,
+                timeElapsed: 0,
+                toeicId:0,
+                take: false
+            });
+            initialize();
+            console.log('type: ',type);
+            router.push(`${type==='level'? PG.LEVEL: PG.PART}`);
+     
+    }
 
     return (
         <div className="bg-white border-slate-200 border-2 shadow-lg rounded-lg w-[190px] h-[650px] m-5 lg:mr-[25%]">
@@ -131,9 +154,15 @@ const PracticeAnswer = ({
                     </ScrollArea>
                 </ul>
                 <div className="mx-10 mt-3">
-                    <button 
+                 {take ?   <button 
+                    type='button'
+                    onClick={handleRefresh}
                     className="w-full h-auto py-[2.5%] flex text-center items-center text-white shadow-xl rounded-lg bg-black justify-center text-[15px] font-semibold hover:bg-zinc-700"
                     >제출하기</button>
+                     :<button 
+                    type='submit'
+                    className="w-full h-auto py-[2.5%] flex text-center items-center text-white shadow-xl rounded-lg bg-black justify-center text-[15px] font-semibold hover:bg-zinc-700"
+                    >제출하기</button>}
                 </div>
             </form>
         </div>
