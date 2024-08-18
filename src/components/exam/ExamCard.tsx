@@ -99,7 +99,7 @@ const ExamCard: FC<ExamCardProps> = ({toeic,toeicId}) => {
 
         {take && (
            <ToeicModalBtn
-           id={1}
+           id={toeic.id}
            label={"해설 보기"}
            toeic={toeic}
          />

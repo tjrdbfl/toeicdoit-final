@@ -1,7 +1,7 @@
 "use client";
 
 import { PG } from "@/constants/enums/PG";
-import { useExamAnswerStore, useResultStore } from "@/store/toeic/store";
+import { useExamAnswerStore, useResultStore, useTakeStore } from "@/store/toeic/store";
 import { useRouter } from "next/navigation";
 
 const ScoreBtn=({label,type,option,toeicId}:{label:string,type:string,option:number,toeicId:number})=>{
@@ -9,7 +9,7 @@ const ScoreBtn=({label,type,option,toeicId}:{label:string,type:string,option:num
     const router=useRouter();
     console.log('type: ',type);
     const url=type==='exam'?`${PG.EXAM}`:type==='level'?`${PG.LEVEL}`:type==='part'? `${PG.PART}`:`${PG.LEVEL_TEST}`;
-
+    const {setTake}=useTakeStore();
     const {initialize}=useExamAnswerStore();
 
     const handleClick=()=>{
@@ -29,11 +29,13 @@ const ScoreBtn=({label,type,option,toeicId}:{label:string,type:string,option:num
         );
 
         if(option===2){
-            initialize();
             router.push(url);
         }else{
             router.push(`${url}/${toeicId}`);
         }
+
+        setTake(toeicId,false);
+        initialize();
        
     }
     

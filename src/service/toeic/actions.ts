@@ -137,7 +137,7 @@ export async function submitExamAnswer(toeicId:number,time:number,formData: Form
                     method:'POST',
                     headers:AuthorizeHeader(accessToken),
                     body:JSON.stringify({
-                        userId:1,
+                        userId:userId,
                         timeElapsed:time,
                         toeicCategoryId:toeicId,
                         data:selections,
