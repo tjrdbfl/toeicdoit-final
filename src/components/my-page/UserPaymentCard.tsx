@@ -3,16 +3,22 @@ import { ERROR } from "@/constants/enums/ERROR";
 import { paymentRefund } from "@/service/payment/actions";
 import { PaymentModel } from "@/types/TransactionData";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const UserPaymentCard=({ paymentResult }: {
         paymentResult: PaymentModel
     })=>{
-
+        const router=useRouter();
+       
+        
         const handleRefund=async()=>{
             const response=await paymentRefund(paymentResult);
             
             if(response.status===200){
                 alert('환불 성공하셨습니다.');
+                router.refresh();
+
             }else{
                 alert(ERROR.SERVER_ERROR);
             }

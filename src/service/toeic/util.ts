@@ -2,7 +2,8 @@ import { p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, time } from "@/constants/chart/
 import { lv0, lv1, lv2, lv3, lv4, lv5, lv6, lv7, lv8, lv9 } from "@/constants/chart/constant";
 
 export function calculateRadarData(score:number){
-    
+    console.log('레벨 : '+Math.floor(score/100));
+
     switch(Math.floor(score/100)){
         case 0:return lv0;
         case 1:return lv1;

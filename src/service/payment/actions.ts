@@ -226,7 +226,7 @@ export async function paymentRefund(paymentResult: PaymentModel) {
 
                     }
 
-                    revalidatePath(`${PG.USER_INFO}`);
+                    //revalidatePath(`${PG.USER_INFO}`);
 
                     return { status: 200 };
                 } else {

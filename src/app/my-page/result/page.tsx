@@ -1,6 +1,7 @@
 import LineChart from "@/components/chart/LineChart";
 import MyPageHeader from "@/components/my-page/MyPageHeader";
 import { AuthorizeHeader } from "@/config/headers";
+import { SERVER, SERVER_API } from "@/constants/enums/API";
 import { ERROR } from "@/constants/enums/ERROR";
 import ResultContainer from "@/templates/my-page/ResultContainer";
 import { MessageData } from "@/types/MessengerData";
@@ -15,38 +16,38 @@ export default async function ResultPage(){
     let data3:number[]=[];
     let data4:number[]=[];
     
-    // try{
-    //     const userId=cookies().get('userId')?.value;
-    //     const accessToken=cookies().get('accessToken')?.value;
-    //     const response=await fetch(`${process.env.NEXT_PUBLIC_TOEIC_API_URL}/api/toeic/recent/${1}`,{
-    //         method:'GET',
-    //         cache:'no-store',
-    //         headers:AuthorizeHeader(accessToken)
-    //     })
+    try{
+        const userId=cookies().get('userId')?.value;
+        const accessToken=cookies().get('accessToken')?.value;
+        const response=await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${SERVER.TOEIC}/${SERVER_API.TOEIC}/recent/${userId}`,{
+            method:'GET',
+            cache:'no-store',
+            headers:AuthorizeHeader(accessToken)
+        })
 
        
-    //     if(response.status===200){
-    //         const result:MessageData=await response.json();
-    //         const resultData=result.data as LineResultData;
+        if(response.status===200){
+            const result:MessageData=await response.json();
+            const resultData=result.data as LineResultData;
 
-    //         if(result.state){
-    //             data1=resultData.recentResults.exam;
-    //             data2=resultData.recentResults.level;
-    //             data3=resultData.recentResults.part;
-    //             data4=resultData.recentResults.test;
-    //             data=[data1,data2,data3,data4];
+            if(result.state){
+                data1=resultData.recentResults.exam;
+                data2=resultData.recentResults.level;
+                data3=resultData.recentResults.part;
+                data4=resultData.recentResults.test;
+                data=[data1,data2,data3,data4];
 
-    //         }else{
-    //             throw new Error(ERROR.SERVER_ERROR);
-    //         }
+            }else{
+                throw new Error(ERROR.SERVER_ERROR);
+            }
             
-    //     }else{
-    //         throw new Error(ERROR.SERVER_ERROR);
-    //     }
+        }else{
+            throw new Error(ERROR.SERVER_ERROR);
+        }
 
-    // }catch(err){
-    //     throw new Error(ERROR.SERVER_ERROR);
-    // }
+    }catch(err){
+        throw new Error(ERROR.SERVER_ERROR);
+    }
     
                     
     return (<>
